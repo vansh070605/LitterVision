@@ -1,0 +1,80 @@
+from flask import Flask, render_template, request
+import tensorflow as tf
+import numpy as np
+import os
+from PIL import Image
+
+app = Flask(__name__)
+UPLOAD_FOLDER = "static/uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+model = tf.keras.models.load_model("model.h5")
+
+classes = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
+
+tips = {
+    "paper": "♻️ Paper can be recycled or composted if clean.",
+    "plastic": "🚯 Avoid single-use plastic. Recycle if possible.",
+    "metal": "🔩 Metal has high recycling value. Please recycle.",
+    "glass": "🍾 Glass is 100% recyclable. Handle carefully.",
+    "cardboard": "📦 Flatten cardboard before recycling.",
+    "trash": "🗑️ Dispose properly to reduce landfill impact."
+}
+
+def preprocess_image(img_path):
+    img = Image.open(img_path).convert("RGB")
+    img = img.resize((224, 224))
+    img = np.array(img) / 255.0
+    img = np.expand_dims(img, axis=0)
+    return img
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    tip = None
+    prediction = None
+    confidence = None
+    image_path = None
+    cleanliness = None
+    top_predictions = None   # ✅ FIX HERE
+
+    if request.method == "POST":
+        file = request.files["image"]
+        if file:
+            image_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+            file.save(image_path)
+
+            img = preprocess_image(image_path)
+            preds = model.predict(img)[0]
+
+            top_indices = preds.argsort()[-3:][::-1]
+            top_predictions = [
+                (classes[i], round(float(preds[i]) * 100, 2))
+                for i in top_indices
+            ]
+
+            prediction = top_predictions[0][0]
+            confidence = top_predictions[0][1]
+            tip = tips.get(prediction, "")
+
+            # Cleanliness score logic
+            if confidence <= 30:
+                cleanliness = "🟢 Clean Area"
+            elif confidence <= 70:
+                cleanliness = "🟡 Moderately Polluted"
+            else:
+                cleanliness = "🔴 Highly Polluted"
+
+
+    return render_template(
+        "index.html",
+        prediction=prediction,
+        confidence=confidence,
+        image_path=image_path,
+        top_predictions=top_predictions,
+        tip=tip,
+        cleanliness=cleanliness
+    )
+
+if __name__ == "__main__":
+    app.run()
