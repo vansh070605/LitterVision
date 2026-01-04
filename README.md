@@ -185,8 +185,6 @@ Engineering Student | AI & ML Enthusiast
 
 🔗 GitHub: [https://github.com/vansh070605](https://github.com/vansh070605)
 
----
-
 <p align="center">
   ⭐ If you like this project, consider starring the repo!
 </p>
