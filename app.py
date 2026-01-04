@@ -1,15 +1,29 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
+import os
+
+# Force CPU-only TensorFlow (IMPORTANT for Render)
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
 import tensorflow as tf
 import numpy as np
-import os
 from PIL import Image
 
 app = Flask(__name__)
+
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-model = tf.keras.models.load_model("model.h5")
+# Lazy-loaded model
+model = None
+
+def get_model():
+    global model
+    if model is None:
+        model = tf.keras.models.load_model("model.h5")
+    return model
+
 
 classes = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
 
@@ -29,22 +43,25 @@ def preprocess_image(img_path):
     img = np.expand_dims(img, axis=0)
     return img
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
-    tip = None
     prediction = None
     confidence = None
     image_path = None
+    top_predictions = None
+    tip = None
     cleanliness = None
-    top_predictions = None   # ✅ FIX HERE
 
     if request.method == "POST":
-        file = request.files["image"]
+        file = request.files.get("image")
         if file:
             image_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
             file.save(image_path)
 
             img = preprocess_image(image_path)
+
+            model = get_model()   # ✅ IMPORTANT FIX
             preds = model.predict(img)[0]
 
             top_indices = preds.argsort()[-3:][::-1]
@@ -57,14 +74,13 @@ def index():
             confidence = top_predictions[0][1]
             tip = tips.get(prediction, "")
 
-            # Cleanliness score logic
+            # Cleanliness score
             if confidence <= 30:
                 cleanliness = "🟢 Clean Area"
             elif confidence <= 70:
                 cleanliness = "🟡 Moderately Polluted"
             else:
                 cleanliness = "🔴 Highly Polluted"
-
 
     return render_template(
         "index.html",
@@ -75,6 +91,17 @@ def index():
         tip=tip,
         cleanliness=cleanliness
     )
+
+
+# Optional: clean favicon 404s
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, "static/uploads/favicon_io"),
+        "favicon.ico",
+        mimetype="image/vnd.microsoft.icon"
+    )
+
 
 if __name__ == "__main__":
     app.run()
