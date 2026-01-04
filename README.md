@@ -188,4 +188,3 @@ Engineering Student | AI & ML Enthusiast
 <p align="center">
   ⭐ If you like this project, consider starring the repo!
 </p>
-```
