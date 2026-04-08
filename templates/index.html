@@ -1,268 +1,525 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
+<html class="dark" lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Analysis Dashboard | LitterVision</title>
-<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='uploads/favicon_io/favicon.ico') }}">
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>LitterVision</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='uploads/favicon_io/favicon.ico') }}">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD@200..700,0..1,-25..0&display=swap"
+        rel="stylesheet" />
 
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "secondary-fixed-dim": "#89d0ed",
-                    "surface-container": "#f0eded",
-                    "secondary": "#0c6780",
-                    "inverse-on-surface": "#f3f0f0",
-                    "on-surface-variant": "#424845",
-                    "error": "#ba1a1a",
-                    "on-secondary-fixed": "#001f29",
-                    "on-secondary-container": "#09657f",
-                    "tertiary-fixed-dim": "#ffb59c",
-                    "surface-variant": "#e4e2e1",
-                    "surface-dim": "#dcd9d9",
-                    "primary-fixed-dim": "#b5ccc1",
-                    "tertiary-fixed": "#ffdbcf",
-                    "on-secondary-fixed-variant": "#004d62",
-                    "primary": "#4e635a",
-                    "secondary-container": "#9ae1ff",
-                    "tertiary-container": "#f8794b",
-                    "on-primary": "#ffffff",
-                    "on-error": "#ffffff",
-                    "outline-variant": "#c2c8c4",
-                    "primary-fixed": "#d1e8dd",
-                    "surface-container-high": "#eae8e7",
-                    "outline": "#727875",
-                    "on-secondary": "#ffffff",
-                    "background": "#fbf9f8",
-                    "surface": "#fbf9f8",
-                    "on-background": "#1b1c1c",
-                    "secondary-fixed": "#baeaff",
-                    "on-primary-container": "#263932",
-                    "on-surface": "#1b1c1c",
-                    "on-tertiary": "#ffffff",
-                    "error-container": "#ffdad6",
-                    "inverse-primary": "#b5ccc1",
-                    "surface-container-low": "#f6f3f2",
-                    "surface-container-highest": "#e4e2e1",
-                    "tertiary": "#a43c12",
-                    "surface-tint": "#4e635a",
-                    "on-tertiary-container": "#641d00",
-                    "on-error-container": "#93000a",
-                    "surface-bright": "#fbf9f8",
-                    "on-tertiary-fixed-variant": "#822800",
-                    "primary-container": "#8da399",
-                    "inverse-surface": "#303030",
-                    "on-primary-fixed": "#0b1f18",
-                    "surface-container-lowest": "#ffffff",
-                    "on-primary-fixed-variant": "#374b43",
-                    "on-tertiary-fixed": "#380c00"
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "cyber-dark": "#050A0F",
+                        "cyber-panel": "rgba(9, 18, 25, 0.65)",
+                        "cyber-border": "rgba(0, 255, 204, 0.2)",
+                        "cyber-accent": "#00FFCC",
+                        "cyber-alert": "#FF1C4C",
+                        "cyber-warn": "#FFC107",
+                        "cyber-success": "#39FF14",
+                        "cyber-text-dim": "#5E898A",
+                    },
+                    "fontFamily": {
+                        "hud": ["'Share Tech Mono'", "monospace"],
+                        "headline": ["'Orbitron'", "sans-serif"],
+                        "body": ["'Rajdhani'", "sans-serif"]
+                    },
+                    "animation": {
+                        "scanline": "scanline 6s linear infinite",
+                        "pulse-glow": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+                        "glitch": "glitch 1s linear infinite",
+                    },
+                    "keyframes": {
+                        "scanline": {
+                            "0%": { transform: "translateY(-100%)" },
+                            "100%": { transform: "translateY(100vh)" }
+                        },
+                        "pulse-glow": {
+                            "0%, 100%": { opacity: 1, filter: "brightness(1) drop-shadow(0 0 10px rgba(0,255,204,0.5))" },
+                            "50%": { opacity: 0.7, filter: "brightness(0.8) drop-shadow(0 0 2px rgba(0,255,204,0.2))" }
+                        }
+                    }
+                },
             },
-            "borderRadius": {
-                    "DEFAULT": "0.25rem",
-                    "lg": "0.5rem",
-                    "xl": "0.75rem",
-                    "full": "9999px"
-            },
-            "fontFamily": {
-                    "headline": ["Manrope"],
-                    "body": ["Inter"],
-                    "label": ["Inter"]
-            }
-          },
-        },
-      }
-</script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
-</style>
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            background-color: #030608;
+            background-image:
+                linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: #00FFCC;
+        }
+
+        /* Glassmorphism Panels */
+        .glass-panel {
+            background: var(--cyber-panel, rgba(9, 18, 25, 0.65));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--cyber-border, rgba(0, 255, 204, 0.2));
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hud-corner {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border: 2px solid #00FFCC;
+            z-index: 10;
+        }
+
+        .tl {
+            top: -1px;
+            left: -1px;
+            border-bottom: 0;
+            border-right: 0;
+        }
+
+        .tr {
+            top: -1px;
+            right: -1px;
+            border-bottom: 0;
+            border-left: 0;
+        }
+
+        .bl {
+            bottom: -1px;
+            left: -1px;
+            border-top: 0;
+            border-right: 0;
+        }
+
+        .br {
+            bottom: -1px;
+            right: -1px;
+            border-top: 0;
+            border-left: 0;
+        }
+
+        .scan-overlay::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 45%, rgba(0, 255, 204, 0.3) 50%, transparent 55%);
+            background-size: 100% 10px;
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+            mix-blend-mode: color-dodge;
+        }
+
+        .crt-flicker {
+            animation: crt-flicker 0.15s infinite;
+        }
+
+        @keyframes crt-flicker {
+            0% {
+                opacity: 0.95;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.9;
+            }
+        }
+
+        /* Ambient Glow based on condition */
+        .glow-success {
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.15);
+            border-color: rgba(57, 255, 20, 0.4);
+        }
+
+        .glow-warning {
+            box-shadow: 0 0 30px rgba(255, 193, 7, 0.15);
+            border-color: rgba(255, 193, 7, 0.4);
+        }
+
+        .glow-alert {
+            box-shadow: 0 0 30px rgba(255, 28, 76, 0.15);
+            border-color: rgba(255, 28, 76, 0.4);
+        }
+
+        .glow-default {
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.1);
+        }
+    </style>
 </head>
-<body class="bg-surface text-on-surface min-h-screen flex flex-col">
-<!-- TopNavBar -->
-<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 py-4 max-w-full bg-stone-50/70 border-b border-outline-variant/20 backdrop-blur-xl">
-<div class="text-2xl font-bold tracking-tight text-primary font-headline">
-            LitterVision
-        </div>
-<nav class="hidden md:flex items-center gap-8">
-<a class="text-stone-600 hover:text-primary transition-colors font-body" href="#">Mission</a>
-<a class="text-primary border-b-2 border-primary pb-1 font-body font-bold" href="/">Dashboard</a>
-<a class="text-stone-600 hover:text-primary transition-colors font-body" href="#">Insights</a>
-</nav>
-<div class="flex items-center gap-4">
-<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold hover:scale-[0.98] transition-transform">
-                New Scan
-            </button>
-</div>
-</header>
 
-<div class="flex flex-1 pt-20 overflow-hidden">
+<body class="min-h-screen flex flex-col font-body antialiased relative overflow-x-hidden crt-flicker">
+    <!-- Global Scanline -->
+    <div
+        class="fixed inset-0 pointer-events-none z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] opacity-20">
+    </div>
 
-<!-- Main Content Canvas -->
-<main class="flex-1 overflow-y-auto bg-surface p-8">
-    <div class="max-w-6xl mx-auto space-y-10 pb-20">
-        
-        <!-- Header Section -->
-        <section>
-            <h1 class="text-5xl font-extrabold tracking-tight text-on-background mb-2">Environmental Scan</h1>
-            <p class="text-on-surface-variant max-w-xl font-body leading-relaxed">
-                Deploy neural networks to analyze urban cleanliness. Upload images for instant deep-learning classification of environmental hazards.
-            </p>
-        </section>
-
-        <!-- Bento Grid Layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            <!-- Left: Upload & Camera Area -->
-            <div class="lg:col-span-8 space-y-6">
-                <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_20px_40px_rgba(0,0,0,0.04)] border border-outline-variant/15 relative overflow-hidden group">
-                    <div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
-                    
-                    <form id="upload-form" method="POST" enctype="multipart/form-data">
-                        <input type="file" id="image-input" name="image" accept="image/*" class="hidden" required onchange="document.getElementById('upload-form').submit();">
-                        
-                        <label for="image-input" class="relative z-10 flex flex-col items-center justify-center py-12 border-2 border-dashed border-outline-variant rounded-xl bg-surface-container-low/30 hover:bg-surface-container-low transition-colors cursor-pointer group">
-                            <div class="bg-primary/10 p-5 rounded-full mb-6 group-hover:scale-110 transition-transform">
-                                <span class="material-symbols-outlined text-4xl text-primary" data-icon="cloud_upload">cloud_upload</span>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2">Upload an Image</h3>
-                            <p class="text-on-surface-variant font-body mb-8">Click to select files or tap to use camera</p>
-                            
-                            <div class="flex gap-4">
-                                <div class="px-6 py-3 bg-primary text-on-primary rounded-lg font-bold flex items-center gap-2 hover:opacity-90">
-                                    <span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
-                                    Analyze Now
-                                </div>
-                            </div>
-                        </label>
-                    </form>
+    <!-- TopNavBar / HUD Bar -->
+    <header
+        class="fixed top-0 w-full z-40 bg-cyber-dark/80 backdrop-blur-md border-b border-cyber-accent/30 tracking-widest text-xs font-hud">
+        <div class="flex justify-between items-center px-6 py-2">
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 animate-pulse-glow text-cyber-accent">
+                    <span class="material-symbols-outlined text-[16px]">satellite_alt</span>
+                    <span>UPLINK ESTABLISHED</span>
                 </div>
-
-                <!-- Real-time Feedback Area -->
-                <div class="bg-surface-container rounded-xl overflow-hidden aspect-video relative border border-outline-variant/10">
-                    {% if image_path %}
-                        <img alt="Analyzed Scenery" class="w-full h-full object-cover" src="{{ image_path }}"/>
-                        <!-- Scanning Grid Overlay Details -->
-                        <div class="absolute inset-0 border-[4px] border-primary/20 m-4 rounded-xl pointer-events-none"></div>
-                        <div class="absolute left-4 top-4 bg-surface-container-lowest px-3 py-1 rounded text-xs font-bold text-primary shadow-lg uppercase">
-                            Target Locked
-                        </div>
-                    {% else %}
-                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container">
-                            <span class="material-symbols-outlined text-on-surface-variant text-6xl mb-4" data-icon="sensors">sensors</span>
-                            <span class="text-on-surface-variant font-bold tracking-widest text-sm uppercase">Waiting for Input Feed</span>
-                            <div class="mt-4 flex gap-1">
-                                <div class="w-1.5 h-1.5 rounded-full bg-outline animate-pulse"></div>
-                                <div class="w-1.5 h-1.5 rounded-full bg-outline animate-pulse delay-75"></div>
-                                <div class="w-1.5 h-1.5 rounded-full bg-outline animate-pulse delay-150"></div>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
+                <div class="hidden md:block text-cyber-text-dim">SYS.OP: V.AGRAWAL // CLEARANCE: OVERRIDE</div>
             </div>
+            <div class="text-cyber-accent flex items-center gap-4">
+                <span>MEM: 64TB/ALLOC</span>
+                <span class="material-symbols-outlined text-[16px]">memory</span>
+            </div>
+        </div>
+    </header>
 
-            <!-- Right: Info/Recent Scans Side Panel -->
-            <div class="lg:col-span-4 space-y-8">
-                
-                {% if prediction %}
-                <!-- RESULTS PANEL -->
-                <div class="bg-surface-container-lowest text-on-surface p-8 rounded-xl shadow-lg relative overflow-hidden border-t-4 {% if cleanliness == '🔴 Highly Polluted' %}border-error{% else %}border-primary{% endif %}">
-                    <h4 class="text-sm font-bold mb-1 text-on-surface-variant uppercase tracking-wider">Classification Match</h4>
-                    <h2 class="text-4xl font-extrabold font-headline mb-6 capitalize {% if cleanliness == '🔴 Highly Polluted' %}text-error{% else %}text-primary{% endif %}">{{ prediction }}</h2>
-                    
-                    <div class="space-y-4 font-body mb-6">
-                        <div>
-                            <div class="flex justify-between text-sm font-semibold mb-1">
-                                <span class="text-on-surface-variant">Confidence Level</span>
-                                <span>{{ confidence }}%</span>
-                            </div>
-                            <div class="w-full bg-surface-variant rounded-full h-2">
-                                <div class="bg-primary h-2 rounded-full" style="width: {{ confidence }}%"></div>
-                            </div>
-                        </div>
+    <div class="flex flex-1 pt-16 h-screen overflow-hidden">
+        <!-- Main Content Canvas -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full">
+            <div class="max-w-[1400px] mx-auto pb-20 mt-4">
 
-                        {% if cleanliness %}
-                        <div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-3">
-                            {% if cleanliness == '🔴 Highly Polluted' %}
-                            <span class="material-symbols-outlined text-error text-2xl">warning</span>
-                            <span class="font-bold text-error">Warning: Highly Polluted</span>
-                            {% elif cleanliness == '🟡 Moderately Polluted' %}
-                            <span class="material-symbols-outlined text-tertiary text-2xl">info</span>
-                            <span class="font-bold text-tertiary">Notice: Moderately Polluted</span>
-                            {% else %}
-                            <span class="material-symbols-outlined text-primary text-2xl">verified</span>
-                            <span class="font-bold text-primary">Status: Clean Area</span>
-                            {% endif %}
-                        </div>
-                        {% endif %}
-                    </div>
+                <!-- Header Section -->
+                <section class="mb-10 relative">
+                    <div class="absolute -left-4 top-0 w-1 h-full bg-cyber-accent/50 rounded"></div>
+                    <h1
+                        class="text-4xl md:text-6xl font-black font-headline tracking-[0.2em] text-white uppercase drop-shadow-[0_0_15px_rgba(0,255,204,0.8)] mb-2 uppercase">
+                        LITTER<span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-accent to-blue-500">VISION</span>
+                    </h1>
+                    <h2 class="text-xl md:text-2xl font-hud tracking-widest text-cyber-text-dim uppercase">Threat-Level
+                        Object Classification Sys // V4.2.1</h2>
+                </section>
 
-                    {% if tip %}
-                    <div class="bg-secondary-container/30 border border-secondary-fixed-dim/40 rounded-xl p-5 relative overflow-hidden">
-                        <h4 class="text-sm font-bold text-secondary mb-2 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-[18px]">lightbulb</span>
-                            Environmental Insight
-                        </h4>
-                        <p class="text-sm text-on-surface-variant leading-relaxed">{{ tip }}</p>
-                    </div>
-                    {% endif %}
-                </div>
-                {% else %}
-                <!-- Quick Tips Card (When Idle) -->
-                <div class="bg-secondary-container text-on-secondary-container p-8 rounded-xl shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-20">
-                        <span class="material-symbols-outlined text-6xl" data-icon="lightbulb">lightbulb</span>
-                    </div>
-                    <h4 class="text-lg font-bold mb-4 font-headline">Analysis Tips</h4>
-                    <ul class="space-y-4 font-body text-sm">
-                        <li class="flex gap-3">
-                            <span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
-                            Ensure natural daylight for highest accuracy (98%+).
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
-                            Keep objects centered in the frame.
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
-                            Avoid extreme angles or heavy motion blur.
-                        </li>
-                    </ul>
-                </div>
+                <!-- Determine Dynamic Color Classes -->
+                {% set container_glow = 'glow-default' %}
+                {% set text_color = 'text-cyber-accent' %}
+                {% set status_icon = 'verified_user' %}
+                {% set status_text = 'AWAITING TELEMETRY' %}
+                {% set border_color = 'border-cyber-accent/30' %}
+
+                {% if cleanliness == '🔴 Highly Polluted' %}
+                {% set container_glow = 'glow-alert' %}
+                {% set text_color = 'text-cyber-alert' %}
+                {% set status_icon = 'warning' %}
+                {% set status_text = 'CRITICAL HAZARD DETECTED' %}
+                {% set border_color = 'border-cyber-alert/50' %}
+                {% elif cleanliness == '🟡 Moderately Polluted' %}
+                {% set container_glow = 'glow-warning' %}
+                {% set text_color = 'text-cyber-warn' %}
+                {% set status_icon = 'report_problem' %}
+                {% set status_text = 'ELEVATED POLLUTION LEVELS' %}
+                {% set border_color = 'border-cyber-warn/50' %}
+                {% elif cleanliness == '🟢 Clean Area' %}
+                {% set container_glow = 'glow-success' %}
+                {% set text_color = 'text-cyber-success' %}
+                {% set status_icon = 'check_circle' %}
+                {% set status_text = 'ENVIRONMENT CLEAR' %}
+                {% set border_color = 'border-cyber-success/50' %}
                 {% endif %}
 
-                <!-- Environmental Pulse Indicator -->
-                <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="relative">
-                            <div class="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                            <div class="absolute inset-0 w-3 h-3 bg-emerald-500 rounded-full animate-ping opacity-75"></div>
+                <!-- Bento Grid Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+
+                    <!-- Center Core: Upload & Camera Area -->
+                    <div class="lg:col-span-8 flex flex-col gap-6">
+
+                        <!-- Viewport (Image Display or Upload Area) -->
+                        <div
+                            class="glass-panel rounded-sm relative overflow-hidden group min-h-[400px] flex flex-col {{ container_glow }}">
+                            <!-- HUD Corners -->
+                            <div class="hud-corner tl"></div>
+                            <div class="hud-corner tr"></div>
+                            <div class="hud-corner bl"></div>
+                            <div class="hud-corner br"></div>
+
+                            <!-- Header Bar for Viewport -->
+                            <div
+                                class="bg-black/50 border-b {{ border_color }} p-2 flex justify-between items-center text-xs font-hud tracking-widest">
+                                <span class="flex items-center gap-2 {{ text_color }}">
+                                    <span class="material-symbols-outlined text-[14px]">{{ status_icon }}</span>
+                                    {{ status_text }}
+                                </span>
+                                <span class="text-cyber-text-dim">CAM/SEC: OPTICAL-MAIN</span>
+                            </div>
+
+                            <!-- Content Area -->
+                            <div class="relative flex-1 flex items-center justify-center p-4">
+                                {% if image_path %}
+                                <!-- Analyzed Image -->
+                                <div
+                                    class="relative w-full h-full scan-overlay overflow-hidden rounded border border-cyber-accent/20 bg-black">
+                                    <!-- Crosshairs -->
+                                    <div
+                                        class="absolute inset-x-0 top-1/2 h-px bg-cyber-accent/30 -translate-y-1/2 z-10 pointer-events-none">
+                                    </div>
+                                    <div
+                                        class="absolute inset-y-0 left-1/2 w-px bg-cyber-accent/30 -translate-x-1/2 z-10 pointer-events-none">
+                                    </div>
+                                    <div
+                                        class="absolute inset-1/2 w-16 h-16 border border-cyber-accent/50 -translate-x-1/2 -translate-y-1/2 rounded-full z-10 pointer-events-none flex items-center justify-center">
+                                        <div class="w-1 h-1 bg-cyber-accent rounded-full"></div>
+                                    </div>
+
+                                    <img alt="Analyzed Scenery"
+                                        class="absolute inset-0 w-full h-full object-contain filter contrast-125"
+                                        src="{{ image_path }}" />
+
+                                    <!-- Target HUD Info Overlay -->
+                                    <div
+                                        class="absolute bottom-4 left-4 bg-black/80 border border-cyber-accent/40 px-4 py-2 font-hud backdrop-blur-sm z-20">
+                                        <div class="text-cyber-accent text-xs mb-1">TARGET IDENT</div>
+                                        <div class="text-white text-xl uppercase tracking-wider font-bold">{{ prediction
+                                            }}</div>
+                                        <div class="{{ text_color }} text-sm font-bold flex items-center gap-2 mt-1">
+                                            <span class="material-symbols-outlined text-[14px]">track_changes</span>
+                                            CONF: {{ confidence }}%
+                                        </div>
+                                    </div>
+
+                                    <!-- Upload New Feed Button over Image -->
+                                    <div class="absolute top-4 right-4 z-20">
+                                        <form id="upload-form-re" method="POST" enctype="multipart/form-data">
+                                            <input type="file" id="image-input-re" name="image" accept="image/*"
+                                                class="hidden"
+                                                onchange="document.getElementById('upload-form-re').submit();">
+                                            <label for="image-input-re"
+                                                class="bg-black/70 hover:bg-cyber-accent/20 border border-cyber-accent text-cyber-accent px-4 py-2 text-xs font-hud cursor-pointer transition-colors backdrop-blur flex items-center gap-2">
+                                                <span class="material-symbols-outlined text-[16px]">sync</span>RE-SCAN
+                                            </label>
+                                        </form>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <!-- Upload Prompt -->
+                                <form id="upload-form" method="POST" enctype="multipart/form-data"
+                                    class="w-full h-full flex items-center justify-center">
+                                    <input type="file" id="image-input" name="image" accept="image/*" class="hidden"
+                                        required onchange="document.getElementById('upload-form').submit();">
+
+                                    <label for="image-input"
+                                        class="relative group cursor-pointer flex flex-col items-center p-10 w-full max-w-lg border border-dashed border-cyber-accent/40 bg-cyber-accent/5 hover:bg-cyber-accent/10 hover:border-cyber-accent/80 transition-all rounded">
+                                        <!-- Corner brackets for target box -->
+                                        <div
+                                            class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyber-accent">
+                                        </div>
+                                        <div
+                                            class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyber-accent">
+                                        </div>
+                                        <div
+                                            class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyber-accent">
+                                        </div>
+                                        <div
+                                            class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyber-accent">
+                                        </div>
+
+                                        <div
+                                            class="w-20 h-20 bg-cyber-accent/10 border border-cyber-accent/50 rounded-full flex items-center justify-center mb-6 group-hover:scale-[1.15] group-hover:bg-cyber-accent/20 transition-all shadow-[0_0_15px_rgba(0,255,204,0.3)]">
+                                            <span
+                                                class="material-symbols-outlined text-[40px] text-cyber-accent drop-shadow-[0_0_8px_rgba(0,255,204,0.8)]">linked_camera</span>
+                                        </div>
+
+                                        <h3
+                                            class="text-2xl font-headline tracking-widest text-white mb-2 uppercase group-hover:text-cyber-accent transition-colors">
+                                            Initialize Sequence</h3>
+                                        <p
+                                            class="font-hud text-cyber-text-dim text-sm text-center mb-8 uppercase tracking-wider">
+                                            Intercept Visual Feed / Tap to Upload Protocol</p>
+
+                                        <div
+                                            class="px-8 py-2 bg-cyber-accent/20 border border-cyber-accent/60 text-cyber-accent hover:bg-cyber-accent/40 hover:text-white transition-all font-hud tracking-widest uppercase flex items-center gap-2">
+                                            Execute <span
+                                                class="material-symbols-outlined text-[16px]">chevron_right</span>
+                                        </div>
+                                    </label>
+                                </form>
+                                {% endif %}
+                            </div>
                         </div>
-                        <span class="font-bold text-sm">System Healthy</span>
+
+                        <!-- Action Bar (Lower Left) -->
+                        <div class="grid grid-cols-3 gap-4">
+                            <div
+                                class="glass-panel p-4 flex flex-col justify-center items-center gap-2 cursor-not-allowed opacity-60">
+                                <span class="material-symbols-outlined text-cyber-accent">radar</span>
+                                <span class="font-hud text-xs tracking-widest text-cyber-text-dim uppercase">Area
+                                    Sweep</span>
+                            </div>
+                            <div
+                                class="glass-panel p-4 flex flex-col justify-center items-center gap-2 cursor-pointer hover:bg-cyber-accent/10 transition-colors border-cyber-accent/40">
+                                <span class="material-symbols-outlined text-cyber-accent">history</span>
+                                <span class="font-hud text-xs tracking-widest text-cyber-accent uppercase">Logs</span>
+                            </div>
+                            <div
+                                class="glass-panel p-4 flex flex-col justify-center items-center gap-2 cursor-pointer hover:bg-cyber-accent/10 transition-colors">
+                                <span class="material-symbols-outlined text-cyber-alert">emergency</span>
+                                <span class="font-hud text-xs tracking-widest text-cyber-alert uppercase">Report</span>
+                            </div>
+                        </div>
+
                     </div>
-                    <p class="text-xs text-on-surface-variant font-body">LitterVision nodes are active and await submission. Latest latency: 45ms.</p>
+
+                    <!-- Right: Telemetry / Diagnostics Side Panel -->
+                    <div class="lg:col-span-4 flex flex-col gap-6">
+
+                        {% if prediction %}
+                        <!-- RESULTS DIAGNOSTICS PANEL -->
+                        <div class="glass-panel rounded-sm p-6 relative {{ container_glow }}">
+                            <div class="hud-corner tl"></div>
+                            <div class="hud-corner tr"></div>
+                            <div class="hud-corner bl"></div>
+                            <div class="hud-corner br"></div>
+
+                            <div class="flex items-center gap-2 mb-6 border-b border-cyber-accent/30 pb-2">
+                                <span class="material-symbols-outlined text-xl {{ text_color }}">troubleshoot</span>
+                                <h3 class="font-headline tracking-widest text-white uppercase">Diagnostic Data</h3>
+                            </div>
+
+                            <div class="mb-8">
+                                <div class="text-xs font-hud text-cyber-text-dim uppercase tracking-widest mb-1">Primary
+                                    Match</div>
+                                <div
+                                    class="text-4xl font-black font-headline uppercase tracking-wider {{ text_color }} drop-shadow-[0_0_8px_currentColor]">
+                                    {{ prediction }}</div>
+                            </div>
+
+                            <!-- Analysis Bars -->
+                            <div class="space-y-5 font-hud mb-8">
+                                <div>
+                                    <div class="flex justify-between text-xs tracking-widest mb-2 uppercase">
+                                        <span class="text-cyber-text-dim">Probability Match</span>
+                                        <span class="text-white">{{ confidence }}%</span>
+                                    </div>
+                                    <!-- Tech Bar -->
+                                    <div class="h-4 w-full bg-black border border-cyber-accent/30 p-0.5 relative">
+                                        <div class="h-full bg-gradient-to-r from-cyber-accent/50 to-cyber-accent w-full origin-left transition-all duration-1000 border-r-2 border-white"
+                                            style="width: {{ confidence }}%"></div>
+                                        <!-- Segmentation marks overlay -->
+                                        <div
+                                            class="absolute inset-0 bg-[linear-gradient(90deg,transparent_24px,rgba(0,0,0,0.5)_24px,rgba(0,0,0,0.5)_25px)] bg-[length:25px_100%] pointer-events-none">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if cleanliness %}
+                            <!-- Situation Report -->
+                            <div class="mb-8">
+                                <div class="text-xs font-hud text-cyber-text-dim uppercase tracking-widest mb-2">
+                                    Situation Assessment</div>
+                                <div class="bg-black/60 border-l-4 {{ border_color }} p-4 flex items-start gap-4">
+                                    <span class="material-symbols-outlined {{ text_color }} text-3xl">{{ status_icon
+                                        }}</span>
+                                    <div>
+                                        <div class="font-headline font-bold text-white uppercase tracking-wider">{{
+                                            cleanliness }}</div>
+                                        <div class="font-body text-cyber-text-dim mt-1 text-sm leading-tight">Protocol
+                                            dictates environmental response based on local sanitation hazard levels.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if tip %}
+                            <!-- Tactical Directive -->
+                            <div>
+                                <div class="text-xs font-hud text-cyber-text-dim uppercase tracking-widest mb-2">
+                                    Tactical Directive</div>
+                                <div class="border border-blue-500/30 bg-blue-500/10 p-4 rounded-sm relative">
+                                    <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-blue-500"></div>
+                                    <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-blue-500">
+                                    </div>
+                                    <p class="font-hud text-blue-300 text-sm leading-relaxed tracking-wide uppercase">{{
+                                        tip }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Top K Predictions secondary layout -->
+                            {% if top_predictions|length > 1 %}
+                            <div class="mt-8 pt-6 border-t border-cyber-accent/20">
+                                <div class="text-xs font-hud text-cyber-text-dim uppercase tracking-widest mb-4">
+                                    Secondary Matches</div>
+                                <div class="space-y-3 font-hud text-xs">
+                                    {% for pred, conf in top_predictions[1:] %}
+                                    <div
+                                        class="flex justify-between items-center px-3 py-2 bg-black/40 border border-cyber-text-dim/20">
+                                        <span class="text-white uppercase">{{ pred }}</span>
+                                        <span class="text-cyber-accent">{{ conf }}%</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% else %}
+                        <!-- System Status Array (Idle Mode) -->
+                        <div class="glass-panel rounded-sm p-6 flex-1">
+                            <div class="flex items-center gap-2 mb-6 border-b border-cyber-accent/30 pb-2">
+                                <span class="material-symbols-outlined text-xl text-cyber-accent">dns</span>
+                                <h3 class="font-headline tracking-widest text-white uppercase">System Matrix</h3>
+                            </div>
+
+                            <div class="space-y-6 font-hud text-sm">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-cyber-text-dim uppercase">Neural Core</span>
+                                    <span class="text-cyber-success flex items-center gap-2"><span
+                                            class="w-2 h-2 bg-cyber-success rounded-full animate-pulse"></span>
+                                        ONLINE</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-cyber-text-dim uppercase">Model Variant</span>
+                                    <span class="text-white">MNv2.FINE.T</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-cyber-text-dim uppercase">Link Sec</span>
+                                    <span class="text-cyber-accent">ENCRYPTED</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-cyber-text-dim uppercase">Server Node</span>
+                                    <span class="text-white">LOCAL.01</span>
+                                </div>
+                            </div>
+
+                            <!-- Data Logs / decorative -->
+                            <div class="mt-10 overflow-hidden h-40 relative">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-[rgba(9,18,25,1)] to-transparent z-10 pointer-events-none">
+                                </div>
+                                <div
+                                    class="font-hud text-xs text-cyber-text-dim opacity-50 space-y-1 block animate-[scanline_10s_linear_infinite]">
+                                    <div>[SYS] INIT NEURAL MATRICES</div>
+                                    <div>[SYS] LOADING WEIGHTS... DONE</div>
+                                    <div>[NET] ESTABLISHING UPLINK</div>
+                                    <div>[NET] HANDSHAKE SECURED</div>
+                                    <div>[MEM] ALLOCATING BUFFER SPACE</div>
+                                    <div>[CAM] WAITING FOR FEED...</div>
+                                    <div>> _</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
-</main>
-</div>
-
-<!-- Footer -->
-<footer class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6 py-12 bg-stone-50 border-t border-stone-200/10 z-10">
-    <div class="flex flex-col items-center md:items-start gap-1">
-        <div class="text-lg font-bold text-stone-900 font-headline">LitterVision</div>
-        <p class="text-xs font-medium font-body text-stone-500">© 2026 LitterVision Intelligence. All rights reserved.</p>
-    </div>
-</footer>
 
 </body>
+
 </html>
