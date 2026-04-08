@@ -8,6 +8,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ model = None
 def get_model():
     global model
     if model is None:
-        model = tf.keras.models.load_model("model.h5")
+        model = tf.keras.models.load_model("best_model_finetuned.h5")
     return model
 
 
@@ -39,8 +40,9 @@ tips = {
 def preprocess_image(img_path):
     img = Image.open(img_path).convert("RGB")
     img = img.resize((224, 224))
-    img = np.array(img) / 255.0
+    img = np.array(img)
     img = np.expand_dims(img, axis=0)
+    img = preprocess_input(img)
     return img
 
 
