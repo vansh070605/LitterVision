@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LITTERVISION AI - Detection Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"surface-variant": "#e5e2e1", "primary-container": "#e91722", "secondary-fixed": "#e5e2e1", "tertiary-fixed": "#c9e7f7", "secondary-container": "#e2dfde", "on-primary-container": "#ffffff", "on-tertiary-container": "#fffeff", "inverse-on-surface": "#f3f0ef", "error-container": "#ffdad6", "tertiary-fixed-dim": "#adcbda", "surface-dim": "#dcd9d9", "primary-fixed-dim": "#ffb4ac", "surface-container-low": "#f6f3f2", "on-secondary-fixed-variant": "#474746", "on-surface": "#1c1b1b", "on-primary-fixed": "#410002", "surface-container-high": "#ebe7e7", "surface-container-highest": "#e5e2e1", "on-background": "#1c1b1b", "outline-variant": "#e9bcb6", tertiary: "#44616f", "surface-container": "#f0edec", primary: "#be0015", "on-secondary-fixed": "#1b1c1c", "inverse-surface": "#313030", "inverse-primary": "#ffb4ac", "secondary-fixed-dim": "#c8c6c5", "on-tertiary-fixed-variant": "#2e4b57", "on-error": "#ffffff", "on-error-container": "#93000a", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#93000d", "on-tertiary": "#ffffff", secondary: "#5f5e5e", "on-primary": "#ffffff", surface: "#fcf9f8", "primary-fixed": "#ffdad6", background: "#fcf9f8", "on-secondary-container": "#636262", "surface-bright": "#fcf9f8", outline: "#946e69", "surface-tint": "#c00015", "tertiary-container": "#5d7a88", error: "#ba1a1a", "on-tertiary-fixed": "#001f2a", "surface-container-lowest": "#ffffff", "on-surface-variant": "#5e3f3a"}, borderRadius: {DEFAULT: "0px", lg: "0px", xl: "0px", full: "0px"}, fontFamily: {headline: ["Space Grotesk"], body: ["Inter"], label: ["Inter"], display: "Space Grotesk"}}}};</script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #131313;
+        color: #e5e2e1;
+        font-family: 'Inter', sans-serif;
+      }
+      .font-space-grotesk { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-800/50 flex justify-between items-center px-8 h-16 w-full">
+<div class="text-2xl font-bold tracking-widest text-white font-space-grotesk uppercase">
+            LITTERVISION AI
+        </div>
+<nav class="hidden md:flex items-center space-x-8 font-space-grotesk tracking-tighter uppercase text-sm">
+<a class="text-neutral-400 hover:text-white transition-colors duration-100 ease-linear" href="#">Home</a>
+<a class="text-red-600 border-b-2 border-red-600 pb-1 duration-100 ease-linear" href="#">Analyze</a>
+<a class="text-neutral-400 hover:text-white transition-colors duration-100 ease-linear" href="#">Impact</a>
+<a class="text-neutral-400 hover:text-white transition-colors duration-100 ease-linear" href="#">About</a>
+</nav>
+<div class="flex items-center space-x-4">
+<button class="p-2 hover:bg-neutral-800/50 transition-colors duration-100 ease-linear">
+<span class="material-symbols-outlined text-on-surface">settings</span>
+</button>
+<button class="p-2 hover:bg-neutral-800/50 transition-colors duration-100 ease-linear">
+<span class="material-symbols-outlined text-on-surface">account_circle</span>
+</button>
+</div>
+</header>
+<main class="flex-grow pt-24 pb-12 px-6 md:px-12 max-w-7xl mx-auto w-full">
+<!-- Hero Title Section -->
+<section class="mb-12 border-l-4 border-primary-container pl-6">
+<h1 class="font-headline text-5xl md:text-7xl font-light tracking-tighter uppercase leading-none">
+                Synthetic <span class="text-primary-container font-bold italic">Observer</span>
+</h1>
+<p class="font-label text-sm uppercase tracking-widest text-neutral-500 mt-4 max-w-xl">
+                Deploy high-precision computer vision to identify urban waste anomalies. Upload environmental data for real-time neural processing.
+            </p>
+</section>
+<!-- Detection Interface Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Column: Upload and Preview -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Drop Zone / Main Preview Canvas -->
+<div class="relative aspect-video bg-surface-container-lowest border border-dashed border-outline-variant group flex flex-col items-center justify-center overflow-hidden">
+<!-- Placeholder UI when empty -->
+<div class="absolute inset-0 z-10 flex flex-col items-center justify-center p-12 text-center transition-opacity duration-300">
+<div class="w-16 h-16 mb-6 flex items-center justify-center bg-surface-container-highest">
+<span class="material-symbols-outlined text-primary-container text-4xl">cloud_upload</span>
+</div>
+<h3 class="font-headline text-2xl uppercase tracking-tighter mb-2">Ingest Visual Stream</h3>
+<p class="font-body text-neutral-500 text-sm mb-8 max-w-xs uppercase tracking-tight">
+                            Drag and drop high-resolution imagery or point your optical sensor to the environment.
+                        </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="px-8 py-3 bg-primary-container text-on-primary-container font-headline uppercase tracking-widest text-xs font-bold hover:bg-inverse-primary transition-colors">
+                                Select Source File
+                            </button>
+<button class="px-8 py-3 bg-surface-container-highest border border-outline font-headline uppercase tracking-widest text-xs hover:bg-surface-bright transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+                                Launch Camera
+                            </button>
+</div>
+</div>
+<!-- Decorative HUD Overlays -->
+<div class="absolute top-4 left-4 z-20 pointer-events-none">
+<div class="flex items-center gap-2 px-2 py-1 bg-neutral-900/80 backdrop-blur-md text-[10px] font-mono tracking-tighter border border-neutral-800">
+<span class="w-2 h-2 bg-primary-container animate-pulse"></span>
+                            SYSTEM READY // 0.00ms LATENCY
+                        </div>
+</div>
+<div class="absolute bottom-4 right-4 z-20 pointer-events-none text-[10px] font-mono text-neutral-600">
+                        LAT: 40.7128° N | LONG: 74.0060° W
+                    </div>
+<!-- Faint Grid Background -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: linear-gradient(#353534 1px, transparent 1px), linear-gradient(90deg, #353534 1px, transparent 1px); background-size: 40px 40px;">
+</div>
+</div>
+<!-- Analysis Controls -->
+<div class="bg-surface-container p-6 flex flex-col md:flex-row items-center justify-between gap-6 border-l-2 border-primary-container">
+<div>
+<h4 class="font-headline text-sm uppercase tracking-widest text-white">Detection Parameters</h4>
+<div class="flex gap-4 mt-2">
+<div class="flex items-center gap-2">
+<input checked="" class="w-4 h-4 bg-surface-container-highest border-outline text-primary-container focus:ring-0 rounded-none" type="checkbox"/>
+<span class="text-[10px] uppercase font-bold text-neutral-400">Plastic</span>
+</div>
+<div class="flex items-center gap-2">
+<input checked="" class="w-4 h-4 bg-surface-container-highest border-outline text-primary-container focus:ring-0 rounded-none" type="checkbox"/>
+<span class="text-[10px] uppercase font-bold text-neutral-400">Metal</span>
+</div>
+<div class="flex items-center gap-2">
+<input checked="" class="w-4 h-4 bg-surface-container-highest border-outline text-primary-container focus:ring-0 rounded-none" type="checkbox"/>
+<span class="text-[10px] uppercase font-bold text-neutral-400">Organic</span>
+</div>
+</div>
+</div>
+<button class="w-full md:w-auto px-12 py-4 bg-primary-container text-on-primary-container font-headline text-xl font-bold uppercase tracking-widest hover:bg-inverse-primary transition-all shadow-[0_0_30px_rgba(233,23,34,0.3)] flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">analytics</span>
+                        Run Analysis
+                    </button>
+</div>
+</div>
+<!-- Right Column: Instructions & Metadata -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Technical Instructions -->
+<div class="bg-surface-container-low p-8 border-t border-outline-variant">
+<h2 class="font-headline text-xl uppercase tracking-widest mb-6 border-b border-outline-variant pb-4">Operational Protocol</h2>
+<ul class="space-y-6">
+<li class="flex gap-4">
+<span class="font-headline text-primary-container font-bold">01.</span>
+<div>
+<h5 class="font-bold text-xs uppercase tracking-tight text-white">Input Acquisition</h5>
+<p class="text-xs text-neutral-500 mt-1 uppercase leading-relaxed">Ensure lighting exceeds 300 lux for optimal neural feature extraction.</p>
+</div>
+</li>
+<li class="flex gap-4">
+<span class="font-headline text-primary-container font-bold">02.</span>
+<div>
+<h5 class="font-bold text-xs uppercase tracking-tight text-white">Model Selection</h5>
+<p class="text-xs text-neutral-500 mt-1 uppercase leading-relaxed">The LV-4 Urban model is optimized for high-density metropolitan debris.</p>
+</div>
+</li>
+<li class="flex gap-4">
+<span class="font-headline text-primary-container font-bold">03.</span>
+<div>
+<h5 class="font-bold text-xs uppercase tracking-tight text-white">Validation</h5>
+<p class="text-xs text-neutral-500 mt-1 uppercase leading-relaxed">Review confidence scores before committing geolocation data to the central ledger.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Recent Captures / History -->
+<div class="bg-surface-container-lowest p-6">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline text-xs uppercase tracking-widest font-bold">Signal History</h2>
+<span class="text-[10px] text-primary-container font-mono tracking-widest uppercase">Live Sync Active</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 bg-surface-container p-3 group hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="w-16 h-12 bg-neutral-900 overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="Close-up of crushed plastic bottle on asphalt city street with dramatic low angle lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWcS0h9SHo-82Is0GP4zkoR6EtnIziaFxS4mcqxtm2UuGIJhDX_tJPOcGNX38WxcTBVfZRhqSk27IQHnYBUHLlX41MVx6AAa6sF5Dssxujb4yDx_VcDfuqsEMSECaRBfWB8hXZurbMBX8ImkKWysMVMo18gTcYjaGt2JKH3MOPTUtGMkENxccdVCdLN7WcBaFg8dPa5p8NweiXucXb1JKLB2zZX_YCPNoEV53s7Sh1c0tXgkGBpbARNravpS_p_Ea_fEamQecgRtv0"/>
+</div>
+<div class="flex-grow">
+<div class="text-[10px] font-bold uppercase text-white">ID: #LV-9923</div>
+<div class="text-[9px] uppercase text-neutral-500 mt-1">98.2% Plastic // Detected 2m ago</div>
+</div>
+<span class="material-symbols-outlined text-neutral-700 group-hover:text-primary-container text-lg">arrow_forward</span>
+</div>
+<div class="flex items-center gap-4 bg-surface-container p-3 group hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="w-16 h-12 bg-neutral-900 overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="Discarded aluminum soda can reflecting neon city lights at night on a wet pavement" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz3yOkHevThoF5FLP3bZ7wq9n81yOlRDBOPLCNcWPsE8IA3SfzwzOAp2SwwbwVaoDwnxsKXF3ggs7UG4aEM9aEok_s3T9UxXsFG-lMq4nMIgswq32xUQlBLLS5syoF0wPqQLEKpXDrd_VGhw5JMUthzsV8iI0iNtN9MT9ss0_K8slMNTEPGnis4ZqmLG1iY_fvLh9rTubWa-naFpceLpcSmjadaa-Di1Ih828yZ6AEyeDs1gqaKHB8esG7d0bOSTYEBxC2J7UcIrdN"/>
+</div>
+<div class="flex-grow">
+<div class="text-[10px] font-bold uppercase text-white">ID: #LV-9921</div>
+<div class="text-[9px] uppercase text-neutral-500 mt-1">84.5% Metal // Detected 14m ago</div>
+</div>
+<span class="material-symbols-outlined text-neutral-700 group-hover:text-primary-container text-lg">arrow_forward</span>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-outline-variant text-[10px] uppercase tracking-widest font-bold hover:bg-surface-container transition-colors">
+                        View Full Archive
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-neutral-950 mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 py-12 max-w-screen-2xl mx-auto w-full border-t border-neutral-900">
+<div class="font-space-grotesk text-lg text-white mb-6 md:mb-0 uppercase tracking-widest font-bold">
+                LITTERVISION AI
+            </div>
+<div class="font-inter text-xs uppercase tracking-widest text-neutral-500 text-center md:text-left mb-6 md:mb-0">
+                © 2024 LITTERVISION AI. TECHNICAL PRECISION FOR URBAN SUSTAINABILITY.
+            </div>
+<div class="flex gap-8 font-inter text-xs uppercase tracking-widest">
+<a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Privacy</a>
+<a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Terms</a>
+<a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">API</a>
+<a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>

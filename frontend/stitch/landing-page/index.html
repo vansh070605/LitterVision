@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"surface-variant": "#e5e2e1", "primary-container": "#e91722", "secondary-fixed": "#e5e2e1", "tertiary-fixed": "#c9e7f7", "secondary-container": "#e2dfde", "on-primary-container": "#ffffff", "on-tertiary-container": "#fffeff", "inverse-on-surface": "#f3f0ef", "error-container": "#ffdad6", "tertiary-fixed-dim": "#adcbda", "surface-dim": "#dcd9d9", "primary-fixed-dim": "#ffb4ac", "surface-container-low": "#f6f3f2", "on-secondary-fixed-variant": "#474746", "on-surface": "#1c1b1b", "on-primary-fixed": "#410002", "surface-container-high": "#ebe7e7", "surface-container-highest": "#e5e2e1", "on-background": "#1c1b1b", "outline-variant": "#e9bcb6", tertiary: "#44616f", "surface-container": "#f0edec", primary: "#be0015", "on-secondary-fixed": "#1b1c1c", "inverse-surface": "#313030", "inverse-primary": "#ffb4ac", "secondary-fixed-dim": "#c8c6c5", "on-tertiary-fixed-variant": "#2e4b57", "on-error": "#ffffff", "on-error-container": "#93000a", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#93000d", "on-tertiary": "#ffffff", secondary: "#5f5e5e", "on-primary": "#ffffff", surface: "#fcf9f8", "primary-fixed": "#ffdad6", background: "#fcf9f8", "on-secondary-container": "#636262", "surface-bright": "#fcf9f8", outline: "#946e69", "surface-tint": "#c00015", "tertiary-container": "#5d7a88", error: "#ba1a1a", "on-tertiary-fixed": "#001f2a", "surface-container-lowest": "#ffffff", "on-surface-variant": "#5e3f3a"}, borderRadius: {DEFAULT: "0px", lg: "0px", xl: "0px", full: "0px"}, fontFamily: {headline: ["Space Grotesk"], body: ["Inter"], label: ["Inter"], display: "Space Grotesk"}}}};</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+        }
+        .font-space-grotesk { font-family: 'Space Grotesk', sans-serif; }
+        .bounding-box {
+            border: 2px solid #e91722;
+            position: absolute;
+            pointer-events: none;
+        }
+        .scanline {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #e91722, transparent);
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-800/50 flex justify-between items-center px-8 h-16 w-full duration-100 ease-linear">
+<div class="text-2xl font-bold tracking-widest text-white font-space-grotesk tracking-tighter uppercase">
+            LITTERVISION AI
+        </div>
+<nav class="hidden md:flex items-center space-x-8 font-space-grotesk tracking-tighter uppercase text-xs">
+<a class="text-red-600 border-b-2 border-red-600 pb-1" href="#">Home</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Analyze</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Impact</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">About</a>
+</nav>
+<div class="flex items-center space-x-4">
+<button class="text-neutral-400 hover:bg-neutral-800/50 p-2 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-neutral-400 hover:bg-neutral-800/50 p-2 transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex flex-col justify-center overflow-hidden border-b border-surface-container-high">
+<div class="absolute inset-0 z-0">
+<img alt="Urban detection environment" class="w-full h-full object-cover opacity-40 mix-blend-luminosity" data-alt="Gritty urban street scene at twilight with high-contrast cinematic lighting and overlayed red digital object detection bounding boxes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR13U_TD0dRTGIOAjbykiOgR_1LShaRMSvDS72dsWLTUK4Sn68ac6feZ7_O6T0GmU7k-Ua-UVGzZvWgizNU5RLMaO2E6ozYlyJxMp0NgpN3IxMx44G2arQ0ZXgiccmdUxr57L9zlsKzHBcvsXDLhG2m-H1grbEJdinuu3N5pYQuXbWHwtKZ_SOtOU-yO_WRYeTRdJT-2dW82eZ8BOHtU468My0CC00783cYaKBJthVPZS13A48ODKJHkR2oFwP71HNXhoKt_M2mq2g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
+</div>
+<div class="relative z-10 px-8 md:px-16 max-w-7xl">
+<div class="flex flex-col space-y-4">
+<div class="flex items-center space-x-2 text-primary-container font-mono text-sm tracking-[0.2em] uppercase">
+<span class="w-2 h-2 bg-primary-container animate-pulse"></span>
+<span>System Live: Neural Network Active</span>
+</div>
+<h1 class="font-headline text-5xl md:text-8xl font-light tracking-tighter leading-none max-w-4xl uppercase">
+                        AI-Powered <br/>
+<span class="text-primary-container font-bold">Urban Cleanliness</span>
+</h1>
+<p class="text-lg md:text-xl text-neutral-400 font-body max-w-xl py-6 leading-relaxed">
+                        Precision computer vision for real-time waste classification. Transforming urban sensor data into actionable environmental stewardship.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4 pt-4">
+<button class="bg-primary-container hover:bg-inverse-primary text-white font-headline uppercase px-10 py-4 text-sm tracking-widest transition-all duration-100 flex items-center justify-center space-x-2 group">
+<span>Initialize Scan</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="border border-outline hover:bg-surface-container-highest text-white font-headline uppercase px-10 py-4 text-sm tracking-widest transition-all duration-100">
+                            Technical API
+                        </button>
+</div>
+</div>
+</div>
+<!-- Visualizer Placeholder -->
+<div class="absolute bottom-12 right-8 hidden lg:block w-96 p-4 bg-surface-container-low/80 backdrop-blur-xl border border-outline-variant/30">
+<div class="flex justify-between items-center mb-4">
+<span class="text-[10px] font-mono uppercase tracking-widest opacity-60">CV Feed Preview</span>
+<span class="text-[10px] font-mono text-primary-container">74.2 FPS</span>
+</div>
+<div class="aspect-video relative bg-surface-container-lowest overflow-hidden">
+<img alt="Detection preview" class="w-full h-full object-cover" data-alt="Close up of a discarded plastic bottle on a sidewalk with a red digital highlight box around it and text 'PLASTIC 98%'" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLFcNRw5BOecW_-_qw4AeYdnGEK0u0N1-HhyhBPsG5JDcu3ZluJpPoXww0EoyAR9l3rYb3u2VQRyYXqLnabqRlKs-5OcM2AEHgs-zB4KY49alQdFG-Bu-7sm1l5GYeT9gMQ_Iz5fD5CTcHWiPdykp0mZy951sF9atBEryK9aNhz0g5UCcCOTONRbQR8mq75IDhqj2RJUL46KB07-h-A6eKGntYn3Ust0tWeFxL3OQZfAS1Q-1l2SyemvZD-TFigjjFKRnNpDAD7Nia"/>
+<div class="bounding-box top-[20%] left-[30%] w-24 h-32">
+<div class="absolute -top-6 left-0 bg-primary-container text-white text-[8px] px-1 font-mono uppercase">Plastic [0.98]</div>
+</div>
+<div class="absolute inset-0 flex flex-col justify-between p-2 pointer-events-none">
+<div class="flex justify-between">
+<div class="w-4 h-4 border-t border-l border-white/50"></div>
+<div class="w-4 h-4 border-t border-r border-white/50"></div>
+</div>
+<div class="flex justify-between">
+<div class="w-4 h-4 border-b border-l border-white/50"></div>
+<div class="w-4 h-4 border-b border-r border-white/50"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Specs / Data Bar -->
+<section class="bg-surface-container-lowest border-b border-neutral-900 py-10 px-8">
+<div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="flex flex-col">
+<span class="text-xs font-mono uppercase text-neutral-500 mb-1">Latency</span>
+<span class="text-3xl font-headline font-light tracking-tighter">14ms</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-mono uppercase text-neutral-500 mb-1">Accuracy</span>
+<span class="text-3xl font-headline font-light tracking-tighter text-primary-container">99.8%</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-mono uppercase text-neutral-500 mb-1">Objects/Sec</span>
+<span class="text-3xl font-headline font-light tracking-tighter">4,200</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-mono uppercase text-neutral-500 mb-1">Nodes</span>
+<span class="text-3xl font-headline font-light tracking-tighter">Global</span>
+</div>
+</div>
+</section>
+<!-- Features: The 6 Waste Categories -->
+<section class="py-24 px-8 bg-surface">
+<div class="max-w-7xl mx-auto">
+<div class="mb-20">
+<h2 class="font-headline text-xs tracking-[0.5em] text-primary-container uppercase mb-4">Classification Engine</h2>
+<h3 class="font-headline text-4xl md:text-6xl font-light tracking-tighter uppercase max-w-2xl">
+                        Universal Waste Detection Protocols.
+                    </h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-neutral-900">
+<!-- Cardboard -->
+<div class="p-12 border-r border-b border-neutral-900 bg-surface hover:bg-surface-container-low transition-colors group">
+<div class="flex justify-between items-start mb-12">
+<span class="font-mono text-xs text-neutral-600">ID: CAT_01</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">view_in_ar</span>
+</div>
+<h4 class="font-headline text-2xl uppercase mb-4 group-hover:text-primary-container transition-colors">Cardboard</h4>
+<p class="text-neutral-500 font-body text-sm leading-relaxed mb-8">
+                            High-volume detection for packaging waste. Optimized for flattened and crumpled geometries in varied lighting conditions.
+                        </p>
+<div class="flex items-center space-x-2">
+<span class="w-1 h-1 bg-primary-container"></span>
+<span class="text-[10px] font-mono uppercase tracking-widest text-neutral-600">Conf. 98.4%</span>
+</div>
+</div>
+<!-- Glass -->
+<div class="p-12 border-r border-b border-neutral-900 bg-surface hover:bg-surface-container-low transition-colors group">
+<div class="flex justify-between items-start mb-12">
+<span class="font-mono text-xs text-neutral-600">ID: CAT_02</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">glass_cup</span>
+</div>
+<h4 class="font-headline text-2xl uppercase mb-4 group-hover:text-primary-container transition-colors">Glass</h4>
+<p class="text-neutral-500 font-body text-sm leading-relaxed mb-8">
+                            Refractive index analysis allows for detection of clear, amber, and green glass even when shattered.
+                        </p>
+<div class="flex items-center space-x-2">
+<span class="w-1 h-1 bg-primary-container"></span>
+<span class="text-[10px] font-mono uppercase tracking-widest text-neutral-600">Conf. 96.1%</span>
+</div>
+</div>
+<!-- Metal -->
+<div class="p-12 border-r border-b border-neutral-900 bg-surface hover:bg-surface-container-low transition-colors group">
+<div class="flex justify-between items-start mb-12">
+<span class="font-mono text-xs text-neutral-600">ID: CAT_03</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">precision_manufacturing</span>
+</div>
+<h4 class="font-headline text-2xl uppercase mb-4 group-hover:text-primary-container transition-colors">Metal</h4>
+<p class="text-neutral-500 font-body text-sm leading-relaxed mb-8">
+                            Specular highlight detection for aluminum and tin. Identifying beverage cans and industrial scrap.
+                        </p>
+<div class="flex items-center space-x-2">
+<span class="w-1 h-1 bg-primary-container"></span>
+<span class="text-[10px] font-mono uppercase tracking-widest text-neutral-600">Conf. 99.2%</span>
+</div>
+</div>
+<!-- Paper -->
+<div class="p-12 border-r border-b border-neutral-900 bg-surface hover:bg-surface-container-low transition-colors group">
+<div class="flex justify-between items-start mb-12">
+<span class="font-mono text-xs text-neutral-600">ID: CAT_04</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">description</span>
+</div>
+<h4 class="font-headline text-2xl uppercase mb-4 group-hover:text-primary-container transition-colors">Paper</h4>
+<p class="text-neutral-500 font-body text-sm leading-relaxed mb-8">
+                            OCR integration for detecting printed materials vs. clean paper. Analyzing texture patterns for fast sorting.
+                        </p>
+<div class="flex items-center space-x-2">
+<span class="w-1 h-1 bg-primary-container"></span>
+<span class="text-[10px] font-mono uppercase tracking-widest text-neutral-600">Conf. 94.8%</span>
+</div>
+</div>
+<!-- Plastic -->
+<div class="p-12 border-r border-b border-neutral-900 bg-surface hover:bg-surface-container-low transition-colors group">
+<div class="flex justify-between items-start mb-12">
+<span class="font-mono text-xs text-neutral-600">ID: CAT_05</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">opacity</span>
+</div>
+<h4 class="font-headline text-2xl uppercase mb-4 group-hover:text-primary-container transition-colors">Plastic</h4>
+<p class="text-neutral-500 font-body text-sm leading-relaxed mb-8">
+                            Multi-polymer identification (PET, HDPE, LDPE). Critical for mitigating microplastic leakage.
+                        </p>
+<div class="flex items-center space-x-2">
+<span class="w-1 h-1 bg-primary-container"></span>
+<span class="text-[10px] font-mono uppercase tracking-widest text-neutral-600">Conf. 99.9%</span>
+</div>
+</div>
+<!-- Trash (Residual) -->
+<div class="p-12 border-r border-b border-neutral-900 bg-surface hover:bg-surface-container-low transition-colors group">
+<div class="flex justify-between items-start mb-12">
+<span class="font-mono text-xs text-neutral-600">ID: CAT_06</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">delete</span>
+</div>
+<h4 class="font-headline text-2xl uppercase mb-4 group-hover:text-primary-container transition-colors">Trash</h4>
+<p class="text-neutral-500 font-body text-sm leading-relaxed mb-8">
+                            Residual waste detection for non-recyclables. Filtering through organic contamination and complex mixed debris.
+                        </p>
+<div class="flex items-center space-x-2">
+<span class="w-1 h-1 bg-primary-container"></span>
+<span class="text-[10px] font-mono uppercase tracking-widest text-neutral-600">Conf. 92.5%</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Observer Section -->
+<section class="bg-surface-container-lowest py-24 border-t border-neutral-900 relative overflow-hidden">
+<div class="absolute right-0 top-0 w-1/3 h-full opacity-10 pointer-events-none">
+<div class="w-full h-full border-l border-neutral-800 grid grid-cols-10 gap-0">
+<div class="border-r border-neutral-800"></div><div class="border-r border-neutral-800"></div><div class="border-r border-neutral-800"></div><div class="border-r border-neutral-800"></div><div class="border-r border-neutral-800"></div><div class="border-r border-neutral-800"></div><div class="border-r border-neutral-800"></div><div class="border-r border-neutral-800"></div><div class="border-r border-neutral-800"></div><div class="border-r border-neutral-800"></div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="relative aspect-square bg-surface-container overflow-hidden group">
+<img alt="Technical server visualization" class="w-full h-full object-cover mix-blend-overlay opacity-50 transition-transform duration-700 group-hover:scale-110" data-alt="Macro photo of glowing server hardware with red and blue led lights, creating a high-tech cyberpunk atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp7w44-2BKeTBu5of0YISDC7K7F9Y79Fj-05qC8SMPX1hu0gGZVN48CzdlXvGiWw1qXS2L0vCxQZEsWIhRnHtlbG2OetnOVCuy4C0q3t3i1iP5OMQMXNhjL-so2BcYowWe0RESStpYRY219jtPgxFm8JzIr5btr-6J4zvqCiFbZubVS8TzK-MdyRnA3p6QFE7QgxIex_zTvzxouWuv6VYfGJjQ75Tv5ps8OSe-eZwYd8thIEOD3hNoXGliJ7Y0CkkCnAM4ASTsfZnW"/>
+<div class="absolute inset-0 p-8 flex flex-col justify-between">
+<div class="flex space-x-2">
+<span class="px-2 py-1 bg-primary-container text-white text-[10px] font-mono uppercase">AI Core v4.2</span>
+<span class="px-2 py-1 border border-neutral-700 text-neutral-400 text-[10px] font-mono uppercase">Status: Optimal</span>
+</div>
+<div class="font-mono text-[10px] leading-relaxed text-neutral-500">
+                            [EXECUTE] LITTER_DETECTION_SUBROUTINE<br/>
+                            [LOAD] WEIGHTS_RESNET_101.H5<br/>
+                            [MAP] GEO_COORDINATES: 40.7128° N, 74.0060° W<br/>
+                            [SCAN] FRAME_ID: 982245-B
+                        </div>
+</div>
+</div>
+<div class="space-y-8">
+<h3 class="font-headline text-5xl font-light uppercase tracking-tighter">The Synthetic <span class="text-primary-container font-bold underline decoration-1 underline-offset-8">Observer</span></h3>
+<p class="font-body text-neutral-400 text-lg leading-relaxed">
+                        LitterVision AI doesn't just see; it analyzes. Utilizing a custom Brutalist-inspired neural architecture, we prioritize technical transparency over decorative flair. Every pixel analyzed contributes to a global heatmap of urban health.
+                    </p>
+<ul class="space-y-4">
+<li class="flex items-center space-x-4 border-b border-neutral-900 pb-4">
+<span class="material-symbols-outlined text-primary-container">sensors</span>
+<span class="font-headline uppercase tracking-widest text-sm">Edge Computing Ready</span>
+</li>
+<li class="flex items-center space-x-4 border-b border-neutral-900 pb-4">
+<span class="material-symbols-outlined text-primary-container">dynamic_feed</span>
+<span class="font-headline uppercase tracking-widest text-sm">Real-time Telemetry Overlay</span>
+</li>
+<li class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-primary-container">encrypted</span>
+<span class="font-headline uppercase tracking-widest text-sm">Privacy-First Data Scrubbing</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-32 px-8 bg-primary-container text-white text-center overflow-hidden relative">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="grid grid-cols-12 h-full">
+<div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div><div class="border-r border-white h-full"></div>
+</div>
+</div>
+<div class="relative z-10 max-w-4xl mx-auto">
+<h2 class="font-headline text-4xl md:text-7xl font-bold uppercase tracking-tighter mb-8 leading-none">Ready to integrate the future of sustainability?</h2>
+<button class="bg-white text-primary-container hover:bg-neutral-100 font-headline uppercase px-12 py-5 text-sm tracking-[0.2em] transition-colors inline-flex items-center space-x-3">
+<span>Get Deployment Key</span>
+<span class="material-symbols-outlined">key</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-neutral-950 w-full border-t border-neutral-900 font-inter text-xs uppercase tracking-widest">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 py-12 max-w-screen-2xl mx-auto w-full">
+<div class="mb-8 md:mb-0">
+<div class="font-space-grotesk text-lg text-white mb-2 uppercase">LITTERVISION AI</div>
+<div class="text-neutral-500">© 2024 LITTERVISION AI. TECHNICAL PRECISION FOR URBAN SUSTAINABILITY.</div>
+</div>
+<div class="flex space-x-8">
+<a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Privacy</a>
+<a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Terms</a>
+<a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">API</a>
+<a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>

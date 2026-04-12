@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LitterVision Impact Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"surface-variant": "#e5e2e1", "primary-container": "#e91722", "secondary-fixed": "#e5e2e1", "tertiary-fixed": "#c9e7f7", "secondary-container": "#e2dfde", "on-primary-container": "#ffffff", "on-tertiary-container": "#fffeff", "inverse-on-surface": "#f3f0ef", "error-container": "#ffdad6", "tertiary-fixed-dim": "#adcbda", "surface-dim": "#dcd9d9", "primary-fixed-dim": "#ffb4ac", "surface-container-low": "#f6f3f2", "on-secondary-fixed-variant": "#474746", "on-surface": "#1c1b1b", "on-primary-fixed": "#410002", "surface-container-high": "#ebe7e7", "surface-container-highest": "#e5e2e1", "on-background": "#1c1b1b", "outline-variant": "#e9bcb6", tertiary: "#44616f", "surface-container": "#f0edec", primary: "#be0015", "on-secondary-fixed": "#1b1c1c", "inverse-surface": "#313030", "inverse-primary": "#ffb4ac", "secondary-fixed-dim": "#c8c6c5", "on-tertiary-fixed-variant": "#2e4b57", "on-error": "#ffffff", "on-error-container": "#93000a", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#93000d", "on-tertiary": "#ffffff", secondary: "#5f5e5e", "on-primary": "#ffffff", surface: "#fcf9f8", "primary-fixed": "#ffdad6", background: "#fcf9f8", "on-secondary-container": "#636262", "surface-bright": "#fcf9f8", outline: "#946e69", "surface-tint": "#c00015", "tertiary-container": "#5d7a88", error: "#ba1a1a", "on-tertiary-fixed": "#001f2a", "surface-container-lowest": "#ffffff", "on-surface-variant": "#5e3f3a"}, borderRadius: {DEFAULT: "0px", lg: "0px", xl: "0px", full: "0px"}, fontFamily: {headline: ["Space Grotesk"], body: ["Inter"], label: ["Inter"], display: "Space Grotesk"}}}};</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+        }
+        .font-space-grotesk { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-800/50 fixed top-0 w-full z-50">
+<div class="flex justify-between items-center px-8 h-16 w-full">
+<div class="text-2xl font-bold tracking-widest text-white font-space-grotesk uppercase">
+                LITTERVISION AI
+            </div>
+<nav class="hidden md:flex items-center space-x-8 font-space-grotesk tracking-tighter uppercase text-sm">
+<a class="text-neutral-400 hover:text-white transition-colors duration-100 ease-linear" href="#">Home</a>
+<a class="text-neutral-400 hover:text-white transition-colors duration-100 ease-linear" href="#">Analyze</a>
+<a class="text-red-600 border-b-2 border-red-600 pb-1 duration-100 ease-linear" href="#">Impact</a>
+<a class="text-neutral-400 hover:text-white transition-colors duration-100 ease-linear" href="#">About</a>
+</nav>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-neutral-400 hover:bg-neutral-800/50 duration-100 ease-linear">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 text-neutral-400 hover:bg-neutral-800/50 duration-100 ease-linear">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-20 px-8 max-w-screen-2xl mx-auto min-h-screen">
+<!-- Header Section -->
+<section class="mb-16">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-3xl">
+<h1 class="text-6xl font-light font-headline tracking-tighter mb-4 uppercase">Global Impact<br/><span class="text-primary-container font-bold">Metrics</span></h1>
+<p class="text-neutral-400 font-body text-lg leading-relaxed max-w-xl">Real-time computer vision analysis of urban waste distribution and environmental recovery progress across 42 active monitoring sectors.</p>
+</div>
+<div class="bg-surface-container p-6 border-l-4 border-primary-container">
+<div class="text-xs font-label uppercase tracking-widest text-neutral-500 mb-1">System Status</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary-container rounded-full animate-pulse"></span>
+<span class="text-white font-mono text-sm">ACTIVE MONITORING</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Collective Impact -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-16">
+<!-- Main Metric: Total Detected -->
+<div class="md:col-span-8 bg-surface-container-low p-8 flex flex-col justify-between min-h-[400px] relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-10">
+<span class="material-symbols-outlined text-9xl">monitoring</span>
+</div>
+<div>
+<h3 class="text-xs font-label uppercase tracking-widest text-neutral-500 mb-8">Aggregate Waste Detection</h3>
+<div class="flex items-baseline gap-4">
+<span class="text-8xl font-headline font-light tracking-tighter">1,402,891</span>
+<span class="text-primary-container font-headline font-bold text-2xl uppercase">Items</span>
+</div>
+</div>
+<div class="mt-12">
+<div class="flex justify-between items-end mb-4">
+<span class="text-xs font-label uppercase text-neutral-400">7-Day Detection Velocity</span>
+<span class="text-xs font-mono text-primary-container">+12.4% vs prev week</span>
+</div>
+<!-- Mock Chart Visualization -->
+<div class="h-32 flex items-end gap-1">
+<div class="flex-1 bg-surface-container-highest h-[40%]"></div>
+<div class="flex-1 bg-surface-container-highest h-[45%]"></div>
+<div class="flex-1 bg-surface-container-highest h-[38%]"></div>
+<div class="flex-1 bg-surface-container-highest h-[60%]"></div>
+<div class="flex-1 bg-surface-container-highest h-[75%]"></div>
+<div class="flex-1 bg-surface-container-highest h-[90%]"></div>
+<div class="flex-1 bg-primary-container h-[95%]"></div>
+</div>
+</div>
+</div>
+<!-- Categories Split -->
+<div class="md:col-span-4 bg-surface-container p-8">
+<h3 class="text-xs font-label uppercase tracking-widest text-neutral-500 mb-8">Classification Profile</h3>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="uppercase font-medium">Plastic Polymers</span>
+<span class="font-mono">54%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest">
+<div class="h-full bg-primary-container w-[54%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="uppercase font-medium">Organic Matter</span>
+<span class="font-mono">22%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest">
+<div class="h-full bg-white w-[22%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="uppercase font-medium">Metallic Alloys</span>
+<span class="font-mono">15%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest">
+<div class="h-full bg-neutral-500 w-[15%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="uppercase font-medium">Other/Unknown</span>
+<span class="font-mono">9%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest">
+<div class="h-full bg-neutral-700 w-[9%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-neutral-800">
+<p class="text-xs text-neutral-500 italic">AI Confidence Interval: 98.4% across all validated sectors.</p>
+</div>
+</div>
+</div>
+<!-- Your Contribution Section -->
+<section class="mb-16">
+<h2 class="text-xs font-label uppercase tracking-[0.3em] text-neutral-500 mb-8">Operator Activity</h2>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-8 border border-neutral-800 flex flex-col gap-8">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary-container">person_pin_circle</span>
+<span class="text-[10px] font-mono text-neutral-500 uppercase">UID: LV-8821</span>
+</div>
+<div>
+<div class="text-4xl font-headline font-light">12,402</div>
+<div class="text-xs font-label uppercase text-neutral-500 mt-1">Total items detected by you</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-8 border border-neutral-800 flex flex-col gap-8">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary-container">speed</span>
+<span class="text-[10px] font-mono text-neutral-500 uppercase">Performance</span>
+</div>
+<div>
+<div class="text-4xl font-headline font-light">#14</div>
+<div class="text-xs font-label uppercase text-neutral-500 mt-1">Global Contributor Rank</div>
+</div>
+</div>
+<div class="bg-primary-container p-8 flex flex-col justify-between">
+<div class="text-white">
+<div class="text-xs font-label uppercase tracking-widest mb-4">Current Streak</div>
+<div class="text-5xl font-headline font-bold">14 DAYS</div>
+</div>
+<div class="flex items-center gap-2 text-white/80 text-sm font-medium">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span>"Elite Observer" Status Unlocked</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Environmental Facts & CTA -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+<div class="space-y-12">
+<h2 class="text-4xl font-headline uppercase tracking-tighter">Technical Insights</h2>
+<div class="space-y-8">
+<div class="flex gap-6 items-start">
+<span class="text-primary-container font-mono text-xl">01/</span>
+<div>
+<h4 class="font-headline text-lg uppercase mb-2">Microplastic Sequestration</h4>
+<p class="text-neutral-400 text-sm leading-relaxed">Early detection of macroscopic plastic waste prevents degradation into microplastics, which currently contaminate 83% of metropolitan water sources.</p>
+</div>
+</div>
+<div class="flex gap-6 items-start">
+<span class="text-primary-container font-mono text-xl">02/</span>
+<div>
+<h4 class="font-headline text-lg uppercase mb-2">Urban Heat Island Mitigation</h4>
+<p class="text-neutral-400 text-sm leading-relaxed">Clean drainage systems allow for efficient urban evaporative cooling, reducing local surface temperatures by up to 1.5°C during peak summer.</p>
+</div>
+</div>
+<div class="flex gap-6 items-start">
+<span class="text-primary-container font-mono text-xl">03/</span>
+<div>
+<h4 class="font-headline text-lg uppercase mb-2">Biodiversity Corridor Health</h4>
+<p class="text-neutral-400 text-sm leading-relaxed">Waste removal in identified "hotspots" has shown a 24% increase in local pollinator activity within 60 days of intervention.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-highest p-12 relative flex flex-col justify-between">
+<div class="relative z-10">
+<h3 class="text-3xl font-headline font-bold tracking-tighter mb-6 uppercase">Local Interventions</h3>
+<p class="text-neutral-300 mb-8 max-w-sm">Join technical cleanup squads in your sector to convert data observations into physical recovery.</p>
+<div class="space-y-4 mb-12">
+<div class="p-4 bg-surface-container-low border-l-2 border-primary-container flex justify-between items-center">
+<div>
+<div class="text-xs font-mono text-primary-container mb-1">MAY 24 | 09:00</div>
+<div class="text-sm font-bold uppercase tracking-tight">Sector 7-G Riverfront Cleanup</div>
+</div>
+<span class="material-symbols-outlined text-neutral-500">arrow_forward</span>
+</div>
+<div class="p-4 bg-surface-container-low border-l-2 border-neutral-700 flex justify-between items-center opacity-60">
+<div>
+<div class="text-xs font-mono text-neutral-500 mb-1">JUN 02 | 10:30</div>
+<div class="text-sm font-bold uppercase tracking-tight">Industrial Park Waste Audit</div>
+</div>
+<span class="material-symbols-outlined text-neutral-500">lock</span>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary-container hover:bg-inverse-primary text-white font-headline font-bold py-5 uppercase tracking-widest transition-all duration-100 relative group overflow-hidden">
+<span class="relative z-10">Deploy to Field</span>
+<div class="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300"></div>
+</button>
+<!-- Background Image Decoration -->
+<div class="absolute bottom-0 right-0 w-1/2 h-1/2 opacity-20 pointer-events-none grayscale">
+<img alt="Urban Waste Management" class="w-full h-full object-cover" data-alt="dramatic wide shot of a futuristic waste processing facility with red industrial lighting and clean metallic surfaces" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjVXYXnPlViDCFSiEyMAJXasvngYWaWKTDDbyVOLtGCvoV28P18gQ-lecwWEI4neZJcj1O4CRWmoLazUVMGnTz8pFUFLVFuGTIEpXikreW4tVSbUfmJyWvnJ-QvqZ3VEz75qhXEemFgEbSXPopZP8yjANebFfomp5dVEgxurzib1NjOK1A3XtXKRunP7sBjRSGgKQTKk8rrhUwaojx4m6S7zAwE98A8ppQ_2g9p2-ww4Ls2JRxctPG9wcirxTINp7vjQYCoETA0ZU7"/>
+</div>
+</div>
+</section>
+<!-- Map Integration Section -->
+<section class="bg-surface-container-low p-8 mb-16 border border-neutral-900">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-xs font-label uppercase tracking-widest text-neutral-500">Deployment Heatmap</h2>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary-container"></span>
+<span class="text-[10px] font-mono uppercase">High Density</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-neutral-700"></span>
+<span class="text-[10px] font-mono uppercase">Recovered</span>
+</div>
+</div>
+</div>
+<div class="aspect-video w-full bg-neutral-900 overflow-hidden relative group">
+<img alt="Global Detection Map" class="w-full h-full object-cover opacity-50 grayscale contrast-125" data-alt="abstract satellite view of a city grid at night with glowing red data points highlighting waste concentrations" data-location="Berlin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1FGsoVUtFt0GqueVtTL4_9ArA4XUGtkosH9MZKIxlbMQ8_6Bn1LpF--I7memPSuTphQSBgNDlZk6DwswpcjgW9RY9ZM7wjPnhhINxi1wZujkHOw0IBj6qinjOOVw3DHoNsFbPQL-h1ue3g6s6mU3Frys1vUNoFMCdPR4sAhT033id6cmHeMmpt5c1RJ-3oWakFnB5HA0A3_reR67wP5Yf9AQp1YOZRttE2OJbHcTYDDfKb8uBvJM1hrCmWzRNhh5VdGm2X6vqoXgU"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="p-4 bg-neutral-950/90 backdrop-blur-md border border-primary-container">
+<span class="text-xs font-mono text-primary-container">VIEWING SECTOR: 42-ALPHA</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-neutral-950 w-full border-t border-neutral-900">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 py-12 max-w-screen-2xl mx-auto">
+<div class="mb-8 md:mb-0">
+<div class="font-space-grotesk text-lg text-white font-bold uppercase mb-2">LITTERVISION AI</div>
+<div class="font-inter text-xs uppercase tracking-widest text-neutral-500">
+                    © 2024 LITTERVISION AI. TECHNICAL PRECISION FOR URBAN SUSTAINABILITY.
+                </div>
+</div>
+<div class="flex gap-8">
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Privacy</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Terms</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">API</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>

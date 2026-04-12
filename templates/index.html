@@ -1,525 +1,185 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>LitterVision</title>
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='uploads/favicon_io/favicon.ico') }}">
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD@200..700,0..1,-25..0&display=swap"
-        rel="stylesheet" />
-
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "cyber-dark": "#050A0F",
-                        "cyber-panel": "rgba(9, 18, 25, 0.65)",
-                        "cyber-border": "rgba(0, 255, 204, 0.2)",
-                        "cyber-accent": "#00FFCC",
-                        "cyber-alert": "#FF1C4C",
-                        "cyber-warn": "#FFC107",
-                        "cyber-success": "#39FF14",
-                        "cyber-text-dim": "#5E898A",
-                    },
-                    "fontFamily": {
-                        "hud": ["'Share Tech Mono'", "monospace"],
-                        "headline": ["'Orbitron'", "sans-serif"],
-                        "body": ["'Rajdhani'", "sans-serif"]
-                    },
-                    "animation": {
-                        "scanline": "scanline 6s linear infinite",
-                        "pulse-glow": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-                        "glitch": "glitch 1s linear infinite",
-                    },
-                    "keyframes": {
-                        "scanline": {
-                            "0%": { transform: "translateY(-100%)" },
-                            "100%": { transform: "translateY(100vh)" }
-                        },
-                        "pulse-glow": {
-                            "0%, 100%": { opacity: 1, filter: "brightness(1) drop-shadow(0 0 10px rgba(0,255,204,0.5))" },
-                            "50%": { opacity: 0.7, filter: "brightness(0.8) drop-shadow(0 0 2px rgba(0,255,204,0.2))" }
-                        }
-                    }
-                },
-            },
-        }
-    </script>
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-        }
-
-        body {
-            background-color: #030608;
-            background-image:
-                linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            color: #00FFCC;
-        }
-
-        /* Glassmorphism Panels */
-        .glass-panel {
-            background: var(--cyber-panel, rgba(9, 18, 25, 0.65));
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--cyber-border, rgba(0, 255, 204, 0.2));
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .hud-corner {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            border: 2px solid #00FFCC;
-            z-index: 10;
-        }
-
-        .tl {
-            top: -1px;
-            left: -1px;
-            border-bottom: 0;
-            border-right: 0;
-        }
-
-        .tr {
-            top: -1px;
-            right: -1px;
-            border-bottom: 0;
-            border-left: 0;
-        }
-
-        .bl {
-            bottom: -1px;
-            left: -1px;
-            border-top: 0;
-            border-right: 0;
-        }
-
-        .br {
-            bottom: -1px;
-            right: -1px;
-            border-top: 0;
-            border-left: 0;
-        }
-
-        .scan-overlay::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, transparent 45%, rgba(0, 255, 204, 0.3) 50%, transparent 55%);
-            background-size: 100% 10px;
-            animation: scanline 8s linear infinite;
-            pointer-events: none;
-            mix-blend-mode: color-dodge;
-        }
-
-        .crt-flicker {
-            animation: crt-flicker 0.15s infinite;
-        }
-
-        @keyframes crt-flicker {
-            0% {
-                opacity: 0.95;
-            }
-
-            50% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0.9;
-            }
-        }
-
-        /* Ambient Glow based on condition */
-        .glow-success {
-            box-shadow: 0 0 30px rgba(57, 255, 20, 0.15);
-            border-color: rgba(57, 255, 20, 0.4);
-        }
-
-        .glow-warning {
-            box-shadow: 0 0 30px rgba(255, 193, 7, 0.15);
-            border-color: rgba(255, 193, 7, 0.4);
-        }
-
-        .glow-alert {
-            box-shadow: 0 0 30px rgba(255, 28, 76, 0.15);
-            border-color: rgba(255, 28, 76, 0.4);
-        }
-
-        .glow-default {
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.1);
-        }
-    </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LITTERVISION AI — AI-Powered Urban Litter Detection</title>
+<meta name="description" content="Precision computer vision for real-time waste classification. Transforming urban sensor data into actionable environmental stewardship."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"surface-variant": "#e5e2e1", "primary-container": "#e91722", "secondary-fixed": "#e5e2e1", "tertiary-fixed": "#c9e7f7", "secondary-container": "#e2dfde", "on-primary-container": "#ffffff", "on-tertiary-container": "#fffeff", "inverse-on-surface": "#f3f0ef", "error-container": "#ffdad6", "tertiary-fixed-dim": "#adcbda", "surface-dim": "#dcd9d9", "primary-fixed-dim": "#ffb4ac", "surface-container-low": "#f6f3f2", "on-secondary-fixed-variant": "#474746", "on-surface": "#1c1b1b", "on-primary-fixed": "#410002", "surface-container-high": "#ebe7e7", "surface-container-highest": "#e5e2e1", "on-background": "#1c1b1b", "outline-variant": "#e9bcb6", tertiary: "#44616f", "surface-container": "#f0edec", primary: "#be0015", "on-secondary-fixed": "#1b1c1c", "inverse-surface": "#313030", "inverse-primary": "#ffb4ac", "secondary-fixed-dim": "#c8c6c5", "on-tertiary-fixed-variant": "#2e4b57", "on-error": "#ffffff", "on-error-container": "#93000a", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#93000d", "on-tertiary": "#ffffff", secondary: "#5f5e5e", "on-primary": "#ffffff", surface: "#fcf9f8", "primary-fixed": "#ffdad6", background: "#fcf9f8", "on-secondary-container": "#636262", "surface-bright": "#fcf9f8", outline: "#946e69", "surface-tint": "#c00015", "tertiary-container": "#5d7a88", error: "#ba1a1a", "on-tertiary-fixed": "#001f2a", "surface-container-lowest": "#ffffff", "on-surface-variant": "#5e3f3a"}, borderRadius: {DEFAULT: "0px", lg: "0px", xl: "0px", full: "0px"}, fontFamily: {headline: ["Space Grotesk"], body: ["Inter"], label: ["Inter"], display: "Space Grotesk"}}}};</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
+  body { background-color: #131313; color: #e5e2e1; font-family: 'Inter', sans-serif; }
+  .font-space-grotesk { font-family: 'Space Grotesk', sans-serif; }
+  .bounding-box { border: 2px solid #e91722; position: absolute; pointer-events: none; }
+  .scanline { height: 2px; background: linear-gradient(to right, transparent, #e91722, transparent); position: absolute; width: 100%; z-index: 10; }
+</style>
 </head>
+<body class="bg-background text-on-background">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-800/50 flex justify-between items-center px-8 h-16 w-full">
+  <div class="text-2xl font-bold tracking-widest text-white font-space-grotesk tracking-tighter uppercase">LITTERVISION AI</div>
+  <nav class="hidden md:flex items-center space-x-8 font-space-grotesk tracking-tighter uppercase text-xs">
+    <a class="text-red-600 border-b-2 border-red-600 pb-1" href="/">Home</a>
+    <a class="text-neutral-400 hover:text-white transition-colors" href="/analyze">Analyze</a>
+    <a class="text-neutral-400 hover:text-white transition-colors" href="/impact">Impact</a>
+    <a class="text-neutral-400 hover:text-white transition-colors" href="#">About</a>
+  </nav>
+  <div class="flex items-center space-x-4">
+    <button class="text-neutral-400 hover:bg-neutral-800/50 p-2 transition-colors">
+      <span class="material-symbols-outlined">settings</span>
+    </button>
+    <button class="text-neutral-400 hover:bg-neutral-800/50 p-2 transition-colors">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </div>
+</header>
 
-<body class="min-h-screen flex flex-col font-body antialiased relative overflow-x-hidden crt-flicker">
-    <!-- Global Scanline -->
-    <div
-        class="fixed inset-0 pointer-events-none z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] opacity-20">
+<main class="pt-16">
+  <!-- Hero Section -->
+  <section class="relative min-h-[921px] flex flex-col justify-center overflow-hidden border-b border-surface-container-high">
+    <div class="absolute inset-0 z-0">
+      <img alt="Urban detection environment" class="w-full h-full object-cover opacity-40 mix-blend-luminosity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR13U_TD0dRTGIOAjbykiOgR_1LShaRMSvDS72dsWLTUK4Sn68ac6feZ7_O6T0GmU7k-Ua-UVGzZvWgizNU5RLMaO2E6ozYlyJxMp0NgpN3IxMx44G2arQ0ZXgiccmdUxr57L9zlsKzHBcvsXDLhG2m-H1grbEJdinuu3N5pYQuXbWHwtKZ_SOtOU-yO_WRYeTRdJT-2dW82eZ8BOHtU468My0CC00783cYaKBJthVPZS13A48ODKJHkR2oFwP71HNXhoKt_M2mq2g"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
     </div>
-
-    <!-- TopNavBar / HUD Bar -->
-    <header
-        class="fixed top-0 w-full z-40 bg-cyber-dark/80 backdrop-blur-md border-b border-cyber-accent/30 tracking-widest text-xs font-hud">
-        <div class="flex justify-between items-center px-6 py-2">
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-2 animate-pulse-glow text-cyber-accent">
-                    <span class="material-symbols-outlined text-[16px]">satellite_alt</span>
-                    <span>UPLINK ESTABLISHED</span>
-                </div>
-                <div class="hidden md:block text-cyber-text-dim">SYS.OP: V.AGRAWAL // CLEARANCE: OVERRIDE</div>
-            </div>
-            <div class="text-cyber-accent flex items-center gap-4">
-                <span>MEM: 64TB/ALLOC</span>
-                <span class="material-symbols-outlined text-[16px]">memory</span>
-            </div>
+    <div class="relative z-10 px-8 md:px-16 max-w-7xl">
+      <div class="flex flex-col space-y-4">
+        <div class="flex items-center space-x-2 text-primary-container font-mono text-sm tracking-[0.2em] uppercase">
+          <span class="w-2 h-2 bg-primary-container animate-pulse"></span>
+          <span>System Live: Neural Network Active</span>
         </div>
-    </header>
-
-    <div class="flex flex-1 pt-16 h-screen overflow-hidden">
-        <!-- Main Content Canvas -->
-        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full">
-            <div class="max-w-[1400px] mx-auto pb-20 mt-4">
-
-                <!-- Header Section -->
-                <section class="mb-10 relative">
-                    <div class="absolute -left-4 top-0 w-1 h-full bg-cyber-accent/50 rounded"></div>
-                    <h1
-                        class="text-4xl md:text-6xl font-black font-headline tracking-[0.2em] text-white uppercase drop-shadow-[0_0_15px_rgba(0,255,204,0.8)] mb-2 uppercase">
-                        LITTER<span
-                            class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-accent to-blue-500">VISION</span>
-                    </h1>
-                    <h2 class="text-xl md:text-2xl font-hud tracking-widest text-cyber-text-dim uppercase">Threat-Level
-                        Object Classification Sys // V4.2.1</h2>
-                </section>
-
-                <!-- Determine Dynamic Color Classes -->
-                {% set container_glow = 'glow-default' %}
-                {% set text_color = 'text-cyber-accent' %}
-                {% set status_icon = 'verified_user' %}
-                {% set status_text = 'AWAITING TELEMETRY' %}
-                {% set border_color = 'border-cyber-accent/30' %}
-
-                {% if cleanliness == '🔴 Highly Polluted' %}
-                {% set container_glow = 'glow-alert' %}
-                {% set text_color = 'text-cyber-alert' %}
-                {% set status_icon = 'warning' %}
-                {% set status_text = 'CRITICAL HAZARD DETECTED' %}
-                {% set border_color = 'border-cyber-alert/50' %}
-                {% elif cleanliness == '🟡 Moderately Polluted' %}
-                {% set container_glow = 'glow-warning' %}
-                {% set text_color = 'text-cyber-warn' %}
-                {% set status_icon = 'report_problem' %}
-                {% set status_text = 'ELEVATED POLLUTION LEVELS' %}
-                {% set border_color = 'border-cyber-warn/50' %}
-                {% elif cleanliness == '🟢 Clean Area' %}
-                {% set container_glow = 'glow-success' %}
-                {% set text_color = 'text-cyber-success' %}
-                {% set status_icon = 'check_circle' %}
-                {% set status_text = 'ENVIRONMENT CLEAR' %}
-                {% set border_color = 'border-cyber-success/50' %}
-                {% endif %}
-
-                <!-- Bento Grid Layout -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-
-                    <!-- Center Core: Upload & Camera Area -->
-                    <div class="lg:col-span-8 flex flex-col gap-6">
-
-                        <!-- Viewport (Image Display or Upload Area) -->
-                        <div
-                            class="glass-panel rounded-sm relative overflow-hidden group min-h-[400px] flex flex-col {{ container_glow }}">
-                            <!-- HUD Corners -->
-                            <div class="hud-corner tl"></div>
-                            <div class="hud-corner tr"></div>
-                            <div class="hud-corner bl"></div>
-                            <div class="hud-corner br"></div>
-
-                            <!-- Header Bar for Viewport -->
-                            <div
-                                class="bg-black/50 border-b {{ border_color }} p-2 flex justify-between items-center text-xs font-hud tracking-widest">
-                                <span class="flex items-center gap-2 {{ text_color }}">
-                                    <span class="material-symbols-outlined text-[14px]">{{ status_icon }}</span>
-                                    {{ status_text }}
-                                </span>
-                                <span class="text-cyber-text-dim">CAM/SEC: OPTICAL-MAIN</span>
-                            </div>
-
-                            <!-- Content Area -->
-                            <div class="relative flex-1 flex items-center justify-center p-4">
-                                {% if image_path %}
-                                <!-- Analyzed Image -->
-                                <div
-                                    class="relative w-full h-full scan-overlay overflow-hidden rounded border border-cyber-accent/20 bg-black">
-                                    <!-- Crosshairs -->
-                                    <div
-                                        class="absolute inset-x-0 top-1/2 h-px bg-cyber-accent/30 -translate-y-1/2 z-10 pointer-events-none">
-                                    </div>
-                                    <div
-                                        class="absolute inset-y-0 left-1/2 w-px bg-cyber-accent/30 -translate-x-1/2 z-10 pointer-events-none">
-                                    </div>
-                                    <div
-                                        class="absolute inset-1/2 w-16 h-16 border border-cyber-accent/50 -translate-x-1/2 -translate-y-1/2 rounded-full z-10 pointer-events-none flex items-center justify-center">
-                                        <div class="w-1 h-1 bg-cyber-accent rounded-full"></div>
-                                    </div>
-
-                                    <img alt="Analyzed Scenery"
-                                        class="absolute inset-0 w-full h-full object-contain filter contrast-125"
-                                        src="{{ image_path }}" />
-
-                                    <!-- Target HUD Info Overlay -->
-                                    <div
-                                        class="absolute bottom-4 left-4 bg-black/80 border border-cyber-accent/40 px-4 py-2 font-hud backdrop-blur-sm z-20">
-                                        <div class="text-cyber-accent text-xs mb-1">TARGET IDENT</div>
-                                        <div class="text-white text-xl uppercase tracking-wider font-bold">{{ prediction
-                                            }}</div>
-                                        <div class="{{ text_color }} text-sm font-bold flex items-center gap-2 mt-1">
-                                            <span class="material-symbols-outlined text-[14px]">track_changes</span>
-                                            CONF: {{ confidence }}%
-                                        </div>
-                                    </div>
-
-                                    <!-- Upload New Feed Button over Image -->
-                                    <div class="absolute top-4 right-4 z-20">
-                                        <form id="upload-form-re" method="POST" enctype="multipart/form-data">
-                                            <input type="file" id="image-input-re" name="image" accept="image/*"
-                                                class="hidden"
-                                                onchange="document.getElementById('upload-form-re').submit();">
-                                            <label for="image-input-re"
-                                                class="bg-black/70 hover:bg-cyber-accent/20 border border-cyber-accent text-cyber-accent px-4 py-2 text-xs font-hud cursor-pointer transition-colors backdrop-blur flex items-center gap-2">
-                                                <span class="material-symbols-outlined text-[16px]">sync</span>RE-SCAN
-                                            </label>
-                                        </form>
-                                    </div>
-                                </div>
-                                {% else %}
-                                <!-- Upload Prompt -->
-                                <form id="upload-form" method="POST" enctype="multipart/form-data"
-                                    class="w-full h-full flex items-center justify-center">
-                                    <input type="file" id="image-input" name="image" accept="image/*" class="hidden"
-                                        required onchange="document.getElementById('upload-form').submit();">
-
-                                    <label for="image-input"
-                                        class="relative group cursor-pointer flex flex-col items-center p-10 w-full max-w-lg border border-dashed border-cyber-accent/40 bg-cyber-accent/5 hover:bg-cyber-accent/10 hover:border-cyber-accent/80 transition-all rounded">
-                                        <!-- Corner brackets for target box -->
-                                        <div
-                                            class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyber-accent">
-                                        </div>
-                                        <div
-                                            class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyber-accent">
-                                        </div>
-                                        <div
-                                            class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyber-accent">
-                                        </div>
-                                        <div
-                                            class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyber-accent">
-                                        </div>
-
-                                        <div
-                                            class="w-20 h-20 bg-cyber-accent/10 border border-cyber-accent/50 rounded-full flex items-center justify-center mb-6 group-hover:scale-[1.15] group-hover:bg-cyber-accent/20 transition-all shadow-[0_0_15px_rgba(0,255,204,0.3)]">
-                                            <span
-                                                class="material-symbols-outlined text-[40px] text-cyber-accent drop-shadow-[0_0_8px_rgba(0,255,204,0.8)]">linked_camera</span>
-                                        </div>
-
-                                        <h3
-                                            class="text-2xl font-headline tracking-widest text-white mb-2 uppercase group-hover:text-cyber-accent transition-colors">
-                                            Initialize Sequence</h3>
-                                        <p
-                                            class="font-hud text-cyber-text-dim text-sm text-center mb-8 uppercase tracking-wider">
-                                            Intercept Visual Feed / Tap to Upload Protocol</p>
-
-                                        <div
-                                            class="px-8 py-2 bg-cyber-accent/20 border border-cyber-accent/60 text-cyber-accent hover:bg-cyber-accent/40 hover:text-white transition-all font-hud tracking-widest uppercase flex items-center gap-2">
-                                            Execute <span
-                                                class="material-symbols-outlined text-[16px]">chevron_right</span>
-                                        </div>
-                                    </label>
-                                </form>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <!-- Action Bar (Lower Left) -->
-                        <div class="grid grid-cols-3 gap-4">
-                            <div
-                                class="glass-panel p-4 flex flex-col justify-center items-center gap-2 cursor-not-allowed opacity-60">
-                                <span class="material-symbols-outlined text-cyber-accent">radar</span>
-                                <span class="font-hud text-xs tracking-widest text-cyber-text-dim uppercase">Area
-                                    Sweep</span>
-                            </div>
-                            <div
-                                class="glass-panel p-4 flex flex-col justify-center items-center gap-2 cursor-pointer hover:bg-cyber-accent/10 transition-colors border-cyber-accent/40">
-                                <span class="material-symbols-outlined text-cyber-accent">history</span>
-                                <span class="font-hud text-xs tracking-widest text-cyber-accent uppercase">Logs</span>
-                            </div>
-                            <div
-                                class="glass-panel p-4 flex flex-col justify-center items-center gap-2 cursor-pointer hover:bg-cyber-accent/10 transition-colors">
-                                <span class="material-symbols-outlined text-cyber-alert">emergency</span>
-                                <span class="font-hud text-xs tracking-widest text-cyber-alert uppercase">Report</span>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Right: Telemetry / Diagnostics Side Panel -->
-                    <div class="lg:col-span-4 flex flex-col gap-6">
-
-                        {% if prediction %}
-                        <!-- RESULTS DIAGNOSTICS PANEL -->
-                        <div class="glass-panel rounded-sm p-6 relative {{ container_glow }}">
-                            <div class="hud-corner tl"></div>
-                            <div class="hud-corner tr"></div>
-                            <div class="hud-corner bl"></div>
-                            <div class="hud-corner br"></div>
-
-                            <div class="flex items-center gap-2 mb-6 border-b border-cyber-accent/30 pb-2">
-                                <span class="material-symbols-outlined text-xl {{ text_color }}">troubleshoot</span>
-                                <h3 class="font-headline tracking-widest text-white uppercase">Diagnostic Data</h3>
-                            </div>
-
-                            <div class="mb-8">
-                                <div class="text-xs font-hud text-cyber-text-dim uppercase tracking-widest mb-1">Primary
-                                    Match</div>
-                                <div
-                                    class="text-4xl font-black font-headline uppercase tracking-wider {{ text_color }} drop-shadow-[0_0_8px_currentColor]">
-                                    {{ prediction }}</div>
-                            </div>
-
-                            <!-- Analysis Bars -->
-                            <div class="space-y-5 font-hud mb-8">
-                                <div>
-                                    <div class="flex justify-between text-xs tracking-widest mb-2 uppercase">
-                                        <span class="text-cyber-text-dim">Probability Match</span>
-                                        <span class="text-white">{{ confidence }}%</span>
-                                    </div>
-                                    <!-- Tech Bar -->
-                                    <div class="h-4 w-full bg-black border border-cyber-accent/30 p-0.5 relative">
-                                        <div class="h-full bg-gradient-to-r from-cyber-accent/50 to-cyber-accent w-full origin-left transition-all duration-1000 border-r-2 border-white"
-                                            style="width: {{ confidence }}%"></div>
-                                        <!-- Segmentation marks overlay -->
-                                        <div
-                                            class="absolute inset-0 bg-[linear-gradient(90deg,transparent_24px,rgba(0,0,0,0.5)_24px,rgba(0,0,0,0.5)_25px)] bg-[length:25px_100%] pointer-events-none">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {% if cleanliness %}
-                            <!-- Situation Report -->
-                            <div class="mb-8">
-                                <div class="text-xs font-hud text-cyber-text-dim uppercase tracking-widest mb-2">
-                                    Situation Assessment</div>
-                                <div class="bg-black/60 border-l-4 {{ border_color }} p-4 flex items-start gap-4">
-                                    <span class="material-symbols-outlined {{ text_color }} text-3xl">{{ status_icon
-                                        }}</span>
-                                    <div>
-                                        <div class="font-headline font-bold text-white uppercase tracking-wider">{{
-                                            cleanliness }}</div>
-                                        <div class="font-body text-cyber-text-dim mt-1 text-sm leading-tight">Protocol
-                                            dictates environmental response based on local sanitation hazard levels.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
-
-                            {% if tip %}
-                            <!-- Tactical Directive -->
-                            <div>
-                                <div class="text-xs font-hud text-cyber-text-dim uppercase tracking-widest mb-2">
-                                    Tactical Directive</div>
-                                <div class="border border-blue-500/30 bg-blue-500/10 p-4 rounded-sm relative">
-                                    <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-blue-500"></div>
-                                    <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-blue-500">
-                                    </div>
-                                    <p class="font-hud text-blue-300 text-sm leading-relaxed tracking-wide uppercase">{{
-                                        tip }}</p>
-                                </div>
-                            </div>
-                            {% endif %}
-
-                            <!-- Top K Predictions secondary layout -->
-                            {% if top_predictions|length > 1 %}
-                            <div class="mt-8 pt-6 border-t border-cyber-accent/20">
-                                <div class="text-xs font-hud text-cyber-text-dim uppercase tracking-widest mb-4">
-                                    Secondary Matches</div>
-                                <div class="space-y-3 font-hud text-xs">
-                                    {% for pred, conf in top_predictions[1:] %}
-                                    <div
-                                        class="flex justify-between items-center px-3 py-2 bg-black/40 border border-cyber-text-dim/20">
-                                        <span class="text-white uppercase">{{ pred }}</span>
-                                        <span class="text-cyber-accent">{{ conf }}%</span>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            {% endif %}
-                        </div>
-                        {% else %}
-                        <!-- System Status Array (Idle Mode) -->
-                        <div class="glass-panel rounded-sm p-6 flex-1">
-                            <div class="flex items-center gap-2 mb-6 border-b border-cyber-accent/30 pb-2">
-                                <span class="material-symbols-outlined text-xl text-cyber-accent">dns</span>
-                                <h3 class="font-headline tracking-widest text-white uppercase">System Matrix</h3>
-                            </div>
-
-                            <div class="space-y-6 font-hud text-sm">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-cyber-text-dim uppercase">Neural Core</span>
-                                    <span class="text-cyber-success flex items-center gap-2"><span
-                                            class="w-2 h-2 bg-cyber-success rounded-full animate-pulse"></span>
-                                        ONLINE</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-cyber-text-dim uppercase">Model Variant</span>
-                                    <span class="text-white">MNv2.FINE.T</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-cyber-text-dim uppercase">Link Sec</span>
-                                    <span class="text-cyber-accent">ENCRYPTED</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-cyber-text-dim uppercase">Server Node</span>
-                                    <span class="text-white">LOCAL.01</span>
-                                </div>
-                            </div>
-
-                            <!-- Data Logs / decorative -->
-                            <div class="mt-10 overflow-hidden h-40 relative">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-t from-[rgba(9,18,25,1)] to-transparent z-10 pointer-events-none">
-                                </div>
-                                <div
-                                    class="font-hud text-xs text-cyber-text-dim opacity-50 space-y-1 block animate-[scanline_10s_linear_infinite]">
-                                    <div>[SYS] INIT NEURAL MATRICES</div>
-                                    <div>[SYS] LOADING WEIGHTS... DONE</div>
-                                    <div>[NET] ESTABLISHING UPLINK</div>
-                                    <div>[NET] HANDSHAKE SECURED</div>
-                                    <div>[MEM] ALLOCATING BUFFER SPACE</div>
-                                    <div>[CAM] WAITING FOR FEED...</div>
-                                    <div>> _</div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-
-                    </div>
-                </div>
-            </div>
-        </main>
+        <h1 class="font-headline text-5xl md:text-8xl font-light tracking-tighter leading-none max-w-4xl uppercase">
+          AI-Powered <br/>
+          <span class="text-primary-container font-bold">Urban Cleanliness</span>
+        </h1>
+        <p class="text-lg md:text-xl text-neutral-400 font-body max-w-xl py-6 leading-relaxed">
+          Precision computer vision for real-time waste classification. Transforming urban sensor data into actionable environmental stewardship.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+          <a href="/analyze" class="bg-primary-container hover:bg-inverse-primary text-white font-headline uppercase px-10 py-4 text-sm tracking-widest transition-all duration-100 flex items-center justify-center space-x-2 group">
+            <span>Initialize Scan</span>
+            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+          <a href="/impact" class="border border-outline hover:bg-surface-container-highest text-white font-headline uppercase px-10 py-4 text-sm tracking-widest transition-all duration-100 flex items-center justify-center">
+            View Impact Data
+          </a>
+        </div>
+      </div>
     </div>
+    <!-- CV Feed Preview -->
+    <div class="absolute bottom-12 right-8 hidden lg:block w-96 p-4 bg-surface-container-low/80 backdrop-blur-xl border border-outline-variant/30">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-[10px] font-mono uppercase tracking-widest opacity-60">CV Feed Preview</span>
+        <span class="text-[10px] font-mono text-primary-container">MobileNetV2</span>
+      </div>
+      <div class="aspect-video relative bg-surface-container-lowest overflow-hidden">
+        <img alt="Detection preview" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLFcNRw5BOecW_-_qw4AeYdnGEK0u0N1-HhyhBPsG5JDcu3ZluJpPoXww0EoyAR9l3rYb3u2VQRyYXqLnabqRlKs-5OcM2AEHgs-zB4KY49alQdFG-Bu-7sm1l5GYeT9gMQ_Iz5fD5CTcHWiPdykp0mZy951sF9atBEryK9aNhz0g5UCcCOTONRbQR8mq75IDhqj2RJUL46KB07-h-A6eKGntYn3Ust0tWeFxL3OQZfAS1Q-1l2SyemvZD-TFigjjFKRnNpDAD7Nia"/>
+        <div class="bounding-box top-[20%] left-[30%] w-24 h-32">
+          <div class="absolute -top-6 left-0 bg-primary-container text-white text-[8px] px-1 font-mono uppercase">Plastic [0.98]</div>
+        </div>
+        <div class="absolute inset-0 flex flex-col justify-between p-2 pointer-events-none">
+          <div class="flex justify-between">
+            <div class="w-4 h-4 border-t border-l border-white/50"></div>
+            <div class="w-4 h-4 border-t border-r border-white/50"></div>
+          </div>
+          <div class="flex justify-between">
+            <div class="w-4 h-4 border-b border-l border-white/50"></div>
+            <div class="w-4 h-4 border-b border-r border-white/50"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- Technical Specs Bar -->
+  <section class="bg-surface-container-lowest border-b border-neutral-900 py-10 px-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="flex flex-col">
+        <span class="text-xs font-mono uppercase text-neutral-500 mb-1">Model</span>
+        <span class="text-3xl font-headline font-light tracking-tighter">MobileNetV2</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xs font-mono uppercase text-neutral-500 mb-1">Accuracy</span>
+        <span class="text-3xl font-headline font-light tracking-tighter text-primary-container">94.8%</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xs font-mono uppercase text-neutral-500 mb-1">Categories</span>
+        <span class="text-3xl font-headline font-light tracking-tighter">6 Classes</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xs font-mono uppercase text-neutral-500 mb-1">Framework</span>
+        <span class="text-3xl font-headline font-light tracking-tighter">TensorFlow</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Waste Categories -->
+  <section class="py-24 px-8 bg-surface">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-20">
+        <h2 class="font-headline text-xs tracking-[0.5em] text-primary-container uppercase mb-4">Classification Engine</h2>
+        <h3 class="font-headline text-4xl md:text-6xl font-light tracking-tighter uppercase max-w-2xl">Universal Waste Detection Protocols.</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-neutral-900">
+        {% set categories = [
+          ('CAT_01', 'view_in_ar', 'Cardboard', 'High-volume detection for packaging waste. Optimized for flattened and crumpled geometries.', '98.4%'),
+          ('CAT_02', 'glass_cup', 'Glass', 'Refractive index analysis for clear, amber, and green glass even when shattered.', '96.1%'),
+          ('CAT_03', 'precision_manufacturing', 'Metal', 'Specular highlight detection for aluminum and tin. Identifying cans and scrap.', '99.2%'),
+          ('CAT_04', 'description', 'Paper', 'Texture pattern analysis for fast sorting of printed and plain paper materials.', '94.8%'),
+          ('CAT_05', 'opacity', 'Plastic', 'Multi-polymer identification (PET, HDPE, LDPE). Critical for microplastic mitigation.', '99.9%'),
+          ('CAT_06', 'delete', 'Trash', 'Residual waste detection through organic contamination and complex mixed debris.', '92.5%')
+        ] %}
+        {% for id, icon, name, desc, conf in categories %}
+        <div class="p-12 border-r border-b border-neutral-900 bg-surface hover:bg-surface-container-low transition-colors group">
+          <div class="flex justify-between items-start mb-12">
+            <span class="font-mono text-xs text-neutral-600">ID: {{ id }}</span>
+            <span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">{{ icon }}</span>
+          </div>
+          <h4 class="font-headline text-2xl uppercase mb-4 group-hover:text-primary-container transition-colors">{{ name }}</h4>
+          <p class="text-neutral-500 font-body text-sm leading-relaxed mb-8">{{ desc }}</p>
+          <div class="flex items-center space-x-2">
+            <span class="w-1 h-1 bg-primary-container"></span>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-600">Conf. {{ conf }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-32 px-8 bg-primary-container text-white text-center overflow-hidden relative">
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+      <div class="grid grid-cols-12 h-full">
+        {% for i in range(12) %}<div class="border-r border-white h-full"></div>{% endfor %}
+      </div>
+    </div>
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <h2 class="font-headline text-4xl md:text-7xl font-bold uppercase tracking-tighter mb-8 leading-none">Ready to classify urban waste?</h2>
+      <a href="/analyze" class="bg-white text-primary-container hover:bg-neutral-100 font-headline uppercase px-12 py-5 text-sm tracking-[0.2em] transition-colors inline-flex items-center space-x-3">
+        <span>Launch Detection Interface</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-neutral-950 w-full border-t border-neutral-900 font-inter text-xs uppercase tracking-widest">
+  <div class="flex flex-col md:flex-row justify-between items-center px-8 py-12 max-w-screen-2xl mx-auto w-full">
+    <div class="mb-8 md:mb-0">
+      <div class="font-space-grotesk text-lg text-white mb-2 uppercase">LITTERVISION AI</div>
+      <div class="text-neutral-500">© 2024 LITTERVISION AI. TECHNICAL PRECISION FOR URBAN SUSTAINABILITY.</div>
+    </div>
+    <div class="flex space-x-8">
+      <a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Privacy</a>
+      <a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Terms</a>
+      <a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">API</a>
+      <a class="text-neutral-500 hover:text-red-500 transition-opacity duration-200" href="#">Contact</a>
+    </div>
+  </div>
+</footer>
 </body>
-
 </html>
