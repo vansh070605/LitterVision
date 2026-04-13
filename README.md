@@ -126,8 +126,3 @@ python app.py
 
 > [!TIP]
 > **Pro-Tip:** For the most accurate results, ensure images have neutral lighting and the item is centered within the detection viewfinder.
-
----
-<p align="center">
-  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1FGsoVUtFt0GqueVtTL4_9ArA4XUGtkosH9MZKIxlbMQ8_6Bn1LpF--I7memPSuTphQSBgNDlZk6DwswpcjgW9RY9ZM7wjPnhhINxi1wZujkHOw0IBj6qinjOOVw3DHoNsFbPQL-h1ue3g6s6mU3Frys1vUNoFMCdPR4sAhT033id6cmHeMmpt5c1RJ-3oWakFnB5HA0A3_reR67wP5Yf9AQp1YOZRttE2OJbHcTYDDfKb8uBvJM1hrCmWzRNhh5VdGm2X6vqoXgU" width="100%" />
-</p>
