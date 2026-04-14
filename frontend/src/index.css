@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#131313] text-[#e5e2e1] font-body;
+  }
+}
+
+.bounding-box {
+  border: 2px solid #e91722;
+  position: absolute;
+  pointer-events: none;
+}
+.scan-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #e91722, transparent);
+  animation: scan 1.5s linear infinite;
+  pointer-events: none;
+  z-index: 20;
+  display: none;
+}
+.scanning .scan-line { display: block; }
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+.confidence-bar {
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
