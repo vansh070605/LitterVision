@@ -38,24 +38,29 @@ To maintain clean developmental standards, the project has been refactored into 
 ```text
 LitterVision/
 │
-├── frontend/                 # Modern React UI Ecosystem
-│   ├── src/                  # Brutalist UI, Components, Pages
-│   ├── package.json          # Vite & React Dependencies
-│   └── vite.config.js        # Configured for Local IP Proxying
-│
 ├── backend/                  # Flask AI Inference Engine
 │   ├── app.py                # Core REST API (Sockets, Waitresses)
 │   ├── requirements.txt      # Python Dependencies
 │   ├── static/uploads/       # Ephemeral Storage for Transmissions
 │   └── models/               # Production Neural Weights (.h5 & .pt)
 │
+├── frontend/                 # Modern React UI Ecosystem
+│   ├── src/                  # Brutalist UI, Components, Pages
+│   ├── package.json          # Vite & React Dependencies
+│   └── vite.config.js        # Configured for Local IP Proxying
+│
 ├── machine_learning/         # Research & Training Archive
 │   ├── ML Training - 1/      # Primary CNN Classification Notebooks
 │   ├── ML Training - 2/      # DCGAN Adversarial Notebooks
 │   ├── dataset/              # Raw Image Tensors (Not in use for runtime)
-│   ├── research/             # Academic Notes & Papers
 │   └── test_images/          # Held-out testing data
 │
+├── research/                 # Academic Notes & Papers
+│   ├── 3574318.3574345.pdf
+│   ├── E-Waste_Segregation_using_GAN.pdf
+│   ├── GAN.pdf
+│   ├── LitterVision.pdf
+│   └── Recycle_Items_Classification_for_Waste_Management_using_CNN_Models.pdf
 └── README.md                 # Project Documentation
 ```
 
