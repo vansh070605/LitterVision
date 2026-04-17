@@ -89,7 +89,7 @@ tips = {
 }
 
 
-def smart_preprocess_image(img_path):
+def smart_preprocess_image(img_source):
     """
     Two-stage preprocessing:
     1. Contour-based foreground crop  — isolates the central object and strips
@@ -99,7 +99,7 @@ def smart_preprocess_image(img_path):
        (Previously we used mobilenet_v2.preprocess_input which maps to [-1,1]
         — that was wrong and suppressed confidence on every inference.)
     """
-    pil_img = Image.open(img_path).convert("RGB")
+    pil_img = Image.open(img_source).convert("RGB")
     cv_img  = cv2.cvtColor(np.array(pil_img), cv2.COLOR_RGB2BGR)
     h, w    = cv_img.shape[:2]
 
@@ -160,14 +160,15 @@ def analyze():
     if not file or not file.filename:
         return render_template("analyze.html", error="No image file provided.")
 
-    # Save upload
-    safe_filename = file.filename.replace(" ", "_")
-    image_path = os.path.join(app.config["UPLOAD_FOLDER"], safe_filename)
-    file.save(image_path)
+    # Read to base64 for template preview without taking up local space
+    file_bytes = file.read()
+    file.seek(0)
+    base64_img = base64.b64encode(file_bytes).decode('utf-8')
+    image_data_url = f"data:image/jpeg;base64,{base64_img}"
 
     # Inference
     start_time = time.time()
-    img = smart_preprocess_image(image_path)
+    img = smart_preprocess_image(file)
     m = get_model()
     preds = m.predict(img)[0]
     latency = round((time.time() - start_time) * 1000, 2)
@@ -205,7 +206,7 @@ def analyze():
         "results.html",
         prediction=prediction,
         confidence=confidence,
-        image_path=image_path,
+        image_path=image_data_url,
         top_predictions=top_predictions,
         tip=tip,
         cleanliness=cleanliness,
@@ -219,12 +220,8 @@ def api_analyze():
     if not file or not file.filename:
         return jsonify({"error": "No image file provided."}), 400
 
-    safe_filename = file.filename.replace(" ", "_")
-    image_path = os.path.join(app.config["UPLOAD_FOLDER"], safe_filename)
-    file.save(image_path)
-
     start_time = time.time()
-    img = smart_preprocess_image(image_path)
+    img = smart_preprocess_image(file)
     m = get_model()
     preds = m.predict(img)[0]
     latency = round((time.time() - start_time) * 1000, 2)
@@ -263,7 +260,7 @@ def api_analyze():
         "cleanliness": cleanliness,
         "top_predictions": top_predictions,
         "tip": tip_str,
-        "image_url": f"/static/uploads/{safe_filename}",
+        "image_url": "",
         "is_ood": is_ood
     })
 
@@ -337,10 +334,10 @@ def session_upload(sid):
         return jsonify({"error": "Invalid session"}), 404
     file = request.files.get("image")
     if file:
-        safe_filename = sid + "_" + file.filename.replace(" ", "_")
-        image_path = os.path.join(app.config["UPLOAD_FOLDER"], safe_filename)
-        file.save(image_path)
-        mobile_sessions[sid]["image"] = f"http://{get_local_ip()}:5000/static/uploads/{safe_filename}"
+        file_bytes = file.read()
+        base64_img = base64.b64encode(file_bytes).decode('utf-8')
+        image_data_url = f"data:image/jpeg;base64,{base64_img}"
+        mobile_sessions[sid]["image"] = image_data_url
         return jsonify({"success": True})
     return jsonify({"error": "No file"}), 400
 
