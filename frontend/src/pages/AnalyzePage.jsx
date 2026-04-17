@@ -61,16 +61,53 @@ export default function AnalyzePage() {
     if (pollingInterval) clearInterval(pollingInterval);
   };
 
-  const handleFileChange = (e) => {
-    const selected = e.target.files[0];
-    if (selected) {
-      setFile(selected);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleFileSelect = (selectedFile) => {
+    if (selectedFile && selectedFile.type.startsWith('image/')) {
+      setFile(selectedFile);
       const reader = new FileReader();
       reader.onload = (ev) => {
         setPreview(ev.target.result);
         setResult(null);
       };
-      reader.readAsDataURL(selected);
+      reader.readAsDataURL(selectedFile);
+    } else {
+      alert("Please select a valid image file.");
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const selected = e.target.files[0];
+    handleFileSelect(selected);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFileSelect(e.dataTransfer.files[0]);
+      e.dataTransfer.clearData();
     }
   };
 
@@ -138,13 +175,21 @@ export default function AnalyzePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Upload / Results View */}
           <div className="lg:col-span-8 space-y-6">
-            <div className="relative aspect-video bg-surface-container-lowest border border-dashed border-outline-variant group flex flex-col items-center justify-center overflow-hidden">
+            <div 
+              className={`relative aspect-video border border-dashed transition-colors duration-200 group flex flex-col items-center justify-center overflow-hidden ${
+                isDragging ? 'bg-primary-container/10 border-primary-container' : 'bg-surface-container-lowest border-outline-variant'
+              }`}
+              onDragOver={handleDragOver}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
               <input type="file" id="file-input" accept="image/*" className="hidden" onChange={handleFileChange} />
               <input type="file" id="camera-input" accept="image/*" capture="environment" className="hidden" onChange={handleFileChange} />
               
               {!preview ? (
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-12 text-center transition-opacity duration-300">
-                  <div className="w-16 h-16 mb-6 flex items-center justify-center bg-surface-container-highest">
+                  <div className={`w-16 h-16 mb-6 flex items-center justify-center transition-colors duration-200 ${isDragging ? 'bg-primary-container/20' : 'bg-surface-container-highest'}`}>
                     <UploadCloud className="text-primary-container w-8 h-8" />
                   </div>
                   <h3 className="font-display text-2xl uppercase tracking-tighter mb-2">Ingest Visual Stream</h3>
@@ -159,7 +204,7 @@ export default function AnalyzePage() {
                       <br />Please only upload imagery containing these profiles to avoid forced out-of-distribution (OOD) inaccuracies.
                     </span>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex flex-col sm:flex-row gap-4 relative z-20">
                     <button onClick={() => document.getElementById('file-input').click()} className="px-8 py-3 bg-primary-container text-on-primary-container font-display uppercase tracking-widest text-xs font-bold hover:bg-inverse-primary transition-colors">
                       Select Source File
                     </button>

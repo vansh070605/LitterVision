@@ -10,7 +10,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+import cv2
 import torch
 import time
 import io
@@ -33,6 +33,11 @@ class CustomBN(tf.keras.layers.BatchNormalization):
         kwargs.pop('renorm_clipping', None)
         kwargs.pop('renorm_momentum', None)
         super().__init__(**kwargs)
+
+# ── OOD / Confidence settings ─────────────────────────────────────────────────
+# If the top prediction confidence is below this threshold the model will
+# refuse to classify the image and return 'Unknown / Out of Distribution'.
+OOD_THRESHOLD = 0.75
 
 mobile_sessions = {}
 
@@ -84,13 +89,56 @@ tips = {
 }
 
 
-def preprocess_image(img_path):
-    img = Image.open(img_path).convert("RGB")
-    img = img.resize((224, 224))
-    img = np.array(img)
-    img = np.expand_dims(img, axis=0)
-    img = preprocess_input(img)
-    return img
+def smart_preprocess_image(img_path):
+    """
+    Two-stage preprocessing:
+    1. Contour-based foreground crop  — isolates the central object and strips
+       distracting background (e.g. the red quilted fabric behind a watch).
+    2. EfficientNetV2-correct normalisation — simple float32 cast to [0, 255];
+       the model's own Rescaling layer handles the rest internally.
+       (Previously we used mobilenet_v2.preprocess_input which maps to [-1,1]
+        — that was wrong and suppressed confidence on every inference.)
+    """
+    pil_img = Image.open(img_path).convert("RGB")
+    cv_img  = cv2.cvtColor(np.array(pil_img), cv2.COLOR_RGB2BGR)
+    h, w    = cv_img.shape[:2]
+
+    # ── Stage 1: Try to isolate the main object with contour detection ─────────
+    gray    = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (15, 15), 0)
+    _, thresh = cv2.threshold(blurred, 0, 255,
+                              cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL,
+                                   cv2.CHAIN_APPROX_SIMPLE)
+
+    MIN_AREA_RATIO = 0.10          # contour must cover ≥10 % of the image
+    PADDING        = 20            # pixels to add around crop
+    crop_done      = False
+
+    if contours:
+        largest = max(contours, key=cv2.contourArea)
+        if cv2.contourArea(largest) / (h * w) >= MIN_AREA_RATIO:
+            x, y, bw, bh = cv2.boundingRect(largest)
+            x1 = max(0, x - PADDING)
+            y1 = max(0, y - PADDING)
+            x2 = min(w, x + bw + PADDING)
+            y2 = min(h, y + bh + PADDING)
+            cv_img    = cv_img[y1:y2, x1:x2]
+            crop_done = True
+
+    # ── Stage 1b: Fallback — centre-crop to 60 % to reduce border clutter ─────
+    if not crop_done:
+        margin_h = int(h * 0.20)
+        margin_w = int(w * 0.20)
+        cv_img = cv_img[margin_h:h - margin_h, margin_w:w - margin_w]
+
+    # ── Stage 2: Resize & normalise for EfficientNetV2 ────────────────────────
+    resized = cv2.resize(cv_img, (224, 224))
+    rgb     = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
+    arr     = np.array(rgb, dtype=np.float32)
+    arr     /= 255.0                            # Normalise to [0, 1] as per training notebook
+    arr     = np.expand_dims(arr, axis=0)
+    return arr
 
 
 # ─────────────────────────────────────────────
@@ -119,7 +167,7 @@ def analyze():
 
     # Inference
     start_time = time.time()
-    img = preprocess_image(image_path)
+    img = smart_preprocess_image(image_path)
     m = get_model()
     preds = m.predict(img)[0]
     latency = round((time.time() - start_time) * 1000, 2)
@@ -130,17 +178,26 @@ def analyze():
         for i in top_indices
     ]
 
-    prediction = top_predictions[0][0]
-    confidence = top_predictions[0][1]
-    tip = tips.get(prediction, "")
+    top_conf_raw = float(preds[top_indices[0]])
+    is_ood       = top_conf_raw < OOD_THRESHOLD
 
-    # Cleanliness severity
-    if confidence <= 30:
-        cleanliness = "🟢 Clean Area"
-    elif confidence <= 70:
-        cleanliness = "🟡 Moderately Polluted"
+    if is_ood:
+        prediction  = "Unknown / Out of Distribution"
+        confidence  = round(top_conf_raw * 100, 2)
+        tip         = ("⚠️ This image does not appear to contain a recognisable "
+                       "waste item. Please upload a clear photo of litter or "
+                       "waste material for accurate classification.")
+        cleanliness = "⚪ Unclassified"
     else:
-        cleanliness = "🔴 Highly Polluted"
+        prediction = top_predictions[0][0]
+        confidence = top_predictions[0][1]
+        tip        = tips.get(prediction, "")
+        if confidence <= 30:
+            cleanliness = "🟢 Clean Area"
+        elif confidence <= 70:
+            cleanliness = "🟡 Moderately Polluted"
+        else:
+            cleanliness = "🔴 Highly Polluted"
 
     now = datetime.now().strftime("%Y.%m.%d.%H.%M.%S")
 
@@ -167,7 +224,7 @@ def api_analyze():
     file.save(image_path)
 
     start_time = time.time()
-    img = preprocess_image(image_path)
+    img = smart_preprocess_image(image_path)
     m = get_model()
     preds = m.predict(img)[0]
     latency = round((time.time() - start_time) * 1000, 2)
@@ -178,16 +235,26 @@ def api_analyze():
         for i in top_indices
     ]
 
-    prediction = top_predictions[0][0]
-    confidence = top_predictions[0][1]
-    tip_str = tips.get(prediction, "")
+    top_conf_raw = float(preds[top_indices[0]])
+    is_ood       = top_conf_raw < OOD_THRESHOLD
 
-    if confidence <= 30:
-        cleanliness = "🟢 Clean Area"
-    elif confidence <= 70:
-        cleanliness = "🟡 Moderately Polluted"
+    if is_ood:
+        prediction  = "Unknown / Out of Distribution"
+        confidence  = round(top_conf_raw * 100, 2)
+        tip_str     = ("⚠️ This image does not appear to contain a recognisable "
+                       "waste item. Please upload a clear photo of litter or "
+                       "waste material for accurate classification.")
+        cleanliness = "⚪ Unclassified"
     else:
-        cleanliness = "🔴 Highly Polluted"
+        prediction = top_predictions[0][0]
+        confidence = top_predictions[0][1]
+        tip_str    = tips.get(prediction, "")
+        if confidence <= 30:
+            cleanliness = "🟢 Clean Area"
+        elif confidence <= 70:
+            cleanliness = "🟡 Moderately Polluted"
+        else:
+            cleanliness = "🔴 Highly Polluted"
 
     return jsonify({
         "prediction": prediction,
@@ -196,7 +263,8 @@ def api_analyze():
         "cleanliness": cleanliness,
         "top_predictions": top_predictions,
         "tip": tip_str,
-        "image_url": f"/static/uploads/{safe_filename}"
+        "image_url": f"/static/uploads/{safe_filename}",
+        "is_ood": is_ood
     })
 
 @app.route("/impact")

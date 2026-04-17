@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
 import { Settings, UserCircle } from 'lucide-react';
 import LandingPage from './pages/LandingPage';
 import AnalyzePage from './pages/AnalyzePage';
@@ -13,10 +13,10 @@ function App() {
         <header className="fixed top-0 w-full z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-800/50 flex justify-between items-center px-8 h-16">
           <Link to="/" className="text-2xl font-bold tracking-widest text-white font-display uppercase">LITTERVISION AI</Link>
           <nav className="hidden md:flex items-center space-x-8 font-display tracking-tighter uppercase text-sm">
-            <Link className="text-neutral-400 hover:text-white transition-colors duration-100" to="/">Home</Link>
-            <Link className="text-neutral-400 hover:text-white transition-colors duration-100" to="/analyze">Analyze</Link>
-            <Link className="text-neutral-400 hover:text-white transition-colors duration-100" to="/impact">Impact</Link>
-            <Link className="text-neutral-400 hover:text-white transition-colors duration-100" to="/about">About</Link>
+            <NavLink className={({ isActive }) => `transition-colors duration-100 ${isActive ? 'text-red-500' : 'text-neutral-400 hover:text-red-500'}`} to="/">Home</NavLink>
+            <NavLink className={({ isActive }) => `transition-colors duration-100 ${isActive ? 'text-red-500' : 'text-neutral-400 hover:text-red-500'}`} to="/analyze">Analyze</NavLink>
+            <NavLink className={({ isActive }) => `transition-colors duration-100 ${isActive ? 'text-red-500' : 'text-neutral-400 hover:text-red-500'}`} to="/impact">Impact</NavLink>
+            <NavLink className={({ isActive }) => `transition-colors duration-100 ${isActive ? 'text-red-500' : 'text-neutral-400 hover:text-red-500'}`} to="/about">About</NavLink>
           </nav>
           <div className="flex items-center space-x-4">
             <button className="p-2 hover:bg-neutral-800/50 transition-colors" aria-label="Settings">
