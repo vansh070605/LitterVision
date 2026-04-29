@@ -1,0 +1,19 @@
+=== Cell 25 ===
+[1m16/16[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m7s[0m 353ms/step
+
+📊 Classification Report
+============================================================
+              precision    recall  f1-score   support
+
+   cardboard       0.98      0.71      0.83        80
+       glass       0.70      0.81      0.75       100
+       metal       0.90      0.67      0.77        82
+       paper       0.85      0.92      0.88       118
+     plastic       0.69      0.76      0.72        96
+       trash       0.51      0.67      0.58        27
+
+    accuracy                           0.78       503
+   macro avg       0.77      0.76      0.76       503
+weighted avg       0.80      0.78      0.78       503
+
+

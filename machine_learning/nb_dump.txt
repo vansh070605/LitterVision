@@ -1,0 +1,449 @@
+Total cells: 30
+
+=== Cell 0 (markdown) ===
+# LitterVision GAN Synthesis
+### Deep Convolutional GAN (DCGAN) — PyTorch
+Trains a DCGAN on the LitterVision 10-class waste dataset and generates synthetic waste images. All outputs are saved to `gan_output/`.
+
+=== Cell 1 (code) ===
+pip install torch
+
+  [OUTPUT]: Collecting torch
+  Downloading torch-2.11.0-cp312-cp312-win_amd64.whl.metadata (29 kB)
+Collecting filelock (from torch)
+  Downloading filelock-3.25.2-py3-none-any.whl.metadata (2.0 kB)
+Requirement already satisfied: typing-extensions>=4.10.0 in e:\CODING\LitterVision\.venv\Lib\site-packages (from to
+
+=== Cell 2 (code) ===
+pip install torchvision
+
+  [OUTPUT]: Collecting torchvision
+  Downloading torchvision-0.26.0-cp312-cp312-win_amd64.whl.metadata (5.5 kB)
+Requirement already satisfied: numpy in e:\CODING\LitterVision\.venv\Lib\site-packages (from torchvision) (2.4.4)
+Requirement already satisfied: torch==2.11.0 in e:\CODING\LitterVision\.venv\Lib\site-
+
+=== Cell 3 (code) ===
+# CELL 1 — Setup & Imports
+# ============================================================
+# Every library the full GAN pipeline needs.
+# PyTorch + torchvision handle the model and data.
+# matplotlib + torchvision.utils.make_grid handle visualisation.
+# ============================================================
+
+import os
+import random
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')   
+
+  [OUTPUT]: Using device : cpu
+GPU not available — running on CPU (slow).
+Install CUDA-enabled PyTorch for GPU acceleration.
+
+
+=== Cell 4 (markdown) ===
+## Cell 2 — Configuration & Hyperparameters
+All tunable values live here. **Only edit this cell** to tune the experiment.
+
+=== Cell 5 (code) ===
+# CELL 2 — Configuration & Hyperparameters
+# ============================================================
+# Central config — touch ONLY this cell to tune the experiment.
+# ============================================================
+
+# ── Paths ─────────────────────────────────────────────────────
+# DATASET_PATH must be an ImageFolder-compatible root:
+#   Dataset/
+#       cardboard/  *.jpg
+#      
+
+  [OUTPUT]: ====================================================
+  LitterVision DCGAN — Config
+====================================================
+  Dataset   : E:\CODING\LitterVision\Dataset
+  Output    : E:\CODING\LitterVision\ML Training - 2\gan_output
+  Img size  : 64
+  Batch     : 128
+  Epochs    : 50
+  L
+
+=== Cell 6 (markdown) ===
+## Cell 3 — Data Pipeline
+Loads the 10-class LitterVision dataset and normalises pixels to **[-1, 1]** (required because the Generator's final Tanh activation outputs in the same range). A verification grid is displayed to confirm the loader is working.
+
+=== Cell 7 (code) ===
+# CELL 3 — Data Pipeline
+# ============================================================
+# torchvision.datasets.ImageFolder walks DATASET_PATH and
+# auto-assigns class labels from sub-folder names.
+#
+# Normalisation trick for GANs:
+#   mean=(0.5,0.5,0.5), std=(0.5,0.5,0.5)
+#   maps [0,1] -> [-1,1]  matching Generator Tanh output
+# ============================================================
+
+transf
+
+  [OUTPUT]: Total images  : 12,259
+Classes (10)  : ['battery', 'biological', 'cardboard', 'clothes', 'glass', 'metal', 'paper', 'plastic', 'shoes', 'trash']
+Batches/epoch : 95
+Saved -> 00_real_batch.png
+
+  [OUTPUT]: C:\Users\Vansh Agrawal\AppData\Local\Temp\ipykernel_19956\3364609657.py:52: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+
+
+=== Cell 8 (markdown) ===
+## Cell 4 — Generator Architecture (G)
+Maps a random noise vector **z** ∈ ℝ¹⁰⁰ → a 64×64 RGB image via 5 transposed-convolution blocks. Each block doubles the spatial resolution: `1 → 4 → 8 → 16 → 32 → 64`. Final activation is **Tanh** so output lives in **[-1, 1]**.
+
+=== Cell 9 (code) ===
+# CELL 4 — Generator Architecture
+# ============================================================
+# DCGAN Generator (Radford et al., 2016):
+#   Input  : z ~ N(0,1)  shape (N, LATENT_DIM, 1, 1)
+#   Output : fake image  shape (N, 3, 64, 64)   range [-1,1]
+#
+# ConvTranspose2d(in_ch, out_ch, kernel=4, stride=2, padding=1)
+# doubles spatial resolution at every block.
+#
+# BatchNorm2d stabilises internal 
+
+  [OUTPUT]: Generator output shape : torch.Size([4, 3, 64, 64])
+Generator sanity check PASSED
+
+
+=== Cell 10 (markdown) ===
+## Cell 5 — Discriminator Architecture (D)
+Binary classifier: given a 64×64 image outputs **P(real) ∈ [0, 1]**. Spatial dims halve at each block: `64 → 32 → 16 → 8 → 4 → 1`. **LeakyReLU(0.2)** prevents dead neurons and improves gradient flow back to G.
+
+=== Cell 11 (code) ===
+# CELL 5 — Discriminator Architecture
+# ============================================================
+# DCGAN Discriminator:
+#   Input  : image  (N, 3, 64, 64)  values in [-1, 1]
+#   Output : scalar (N,)            P(image is real) in [0, 1]
+#
+# Conv2d(in, out, kernel=4, stride=2, padding=1) halves spatial dims.
+# LeakyReLU(0.2) preferred over ReLU — allows small gradients for
+#   negative activati
+
+  [OUTPUT]: Discriminator output shape : torch.Size([4])
+Output range (Sigmoid)     : [0.4079, 0.5897]
+Discriminator sanity check PASSED
+
+
+=== Cell 12 (markdown) ===
+## Cell 6 — Initialisation & Optimisers
+Custom weight init from the DCGAN paper (`Conv ~ N(0, 0.02)`, `BN weight ~ N(1, 0.02)`) plus two independent Adam optimisers — one per network.
+
+=== Cell 13 (code) ===
+# CELL 6 — Initialisation & Optimisers
+# ============================================================
+# DCGAN paper prescribes specific weight initialisation:
+#   Conv / ConvTranspose -> N(0, 0.02)
+#   BatchNorm weight     -> N(1, 0.02)
+#   BatchNorm bias       -> 0
+# Proper init prevents mode collapse and early training instability.
+# ============================================================
+
+
+
+  [OUTPUT]: Generator
+Generator(
+  (net): Sequential(
+    (0): ConvTranspose2d(100, 512, kernel_size=(4, 4), stride=(1, 1), bias=False)
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): ConvTranspose2d(512, 256, kernel_size=(4, 4), str
+
+=== Cell 14 (markdown) ===
+## Cell 7 — Training Loop
+The GAN minimax game over `NUM_EPOCHS` epochs.
+
+**Step A — Train D:** `loss_D = BCELoss(D(x), 1) + BCELoss(D(G(z)), 0)`  
+**Step B — Train G:** `loss_G = BCELoss(D(G(z)), 1)`  (G wants D to call its fakes real)
+
+Fixed-noise grids are saved at every epoch end so you can track visual progress.
+
+=== Cell 15 (code) ===
+# CELL 7 — Training Loop
+# ============================================================
+# GAN MINIMAX (Goodfellow et al., 2014):
+#   min_G max_D  E[log D(x)] + E[log(1 - D(G(z)))]
+#
+# Each mini-batch performs two alternating gradient steps:
+#
+# STEP A — Update Discriminator
+#   A1. Forward real batch  -> loss_D_real = BCE(D(x),    1)
+#   A2. Forward fake batch  -> loss_D_fake = BCE(D(G(z)), 0)
+#  
+
+  [OUTPUT]: Starting training...
+Epochs: 50  |  Batches/epoch: 95  |  Device: cpu
+======================================================================
+[Epoch   1/50][Batch   50/95]  Loss_D: 0.2231  Loss_G: 6.0361  D(x): 0.8721  D(G(z)): 0.0029
+[Epoch   1/50][Batch   95/95]  Loss_D: 0.3779  Loss_G: 5.6762  D(x
+  [OUTPUT]: C:\Users\Vansh Agrawal\AppData\Local\Temp\ipykernel_19956\1963515950.py:117: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+
+  [OUTPUT]:   -> Epoch 001 grid saved: E:\CODING\LitterVision\ML Training - 2\gan_output\epoch_001_fakes.png
+[Epoch   2/50][Batch   50/95]  Loss_D: 0.5956  Loss_G: 2.4677  D(x): 0.6893  D(G(z)): 0.0992
+[Epoch   2/50][Batch   95/95]  Loss_D: 0.2699  Loss_G: 5.0160  D(x): 0.9318  D(G(z)): 0.0092
+  -> Epoch 002 gr
+  [OUTPUT]: C:\Users\Vansh Agrawal\AppData\Local\Temp\ipykernel_19956\1963515950.py:155: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+
+
+=== Cell 16 (markdown) ===
+## Cell 8 — Save Model & Final Inference
+Saves `generator.pth` and provides a standalone `generate_images()` function you can call any time to synthesise fresh waste images.
+
+=== Cell 17 (code) ===
+# CELL 8 — Save Model & Final Inference
+# ============================================================
+# Only the Generator is needed at inference time.
+# We save both a clean weights-only file and a full training state.
+# ============================================================
+
+# ── Save generator weights only (for inference) ───────────────
+GENERATOR_SAVE_PATH = os.path.join(OUTPUT_DIR, 'ge
+
+  [OUTPUT]: Generator weights saved -> E:\CODING\LitterVision\ML Training - 2\gan_output\generator.pth
+Full state saved        -> E:\CODING\LitterVision\ML Training - 2\gan_output\full_training_state.pth
+
+Generating 16 fresh synthetic images...
+Saved -> E:\CODING\LitterVision\ML Training - 2\gan_output\inferenc
+  [OUTPUT]: C:\Users\Vansh Agrawal\AppData\Local\Temp\ipykernel_19956\3075865102.py:81: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+
+
+=== Cell 18 (markdown) ===
+# CELL 9 — Quantitative Evaluation (Real vs Fake)
+
+=== Cell 19 (code) ===
+from sklearn.metrics import classification_report, accuracy_score, f1_score
+import seaborn as sns
+
+def evaluate_gan(generator, discriminator, dataloader, n_samples=512):
+    generator.eval()
+    discriminator.eval()
+    
+    all_preds = []
+    all_labels = []
+    all_scores = []
+    
+    with torch.no_grad():
+        # 1. Evaluate on Real Images
+        count = 0
+        for real_imgs, _ in datalo
+
+  [OUTPUT]: Running final evaluation on test batch...
+
+📊 Discriminator Classification Report (Real vs Fake)
+====================================================
+              precision    recall  f1-score   support
+
+        Fake       0.57      0.95      0.71       256
+        Real       0.84      0.29      0.4
+  [OUTPUT]: C:\Users\Vansh Agrawal\AppData\Local\Temp\ipykernel_19956\202427344.py:64: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+
+
+=== Cell 20 (markdown) ===
+# CELL 10 — Visual Comparison
+
+=== Cell 21 (code) ===
+real_batch, _ = next(iter(dataloader))
+with torch.no_grad():
+    z = torch.randn(8, LATENT_DIM, 1, 1, device=device)
+    fakes = netG(z).cpu()
+fig, axes = plt.subplots(2, 1, figsize=(15, 8))
+# Real row
+grid_real = vutils.make_grid(real_batch[:8], nrow=8, normalize=True, value_range=(-1,1))
+axes[0].imshow(np.transpose(grid_real, (1, 2, 0)))
+axes[0].set_title("REAL Waste Samples", fontsize=14, fontw
+
+  [OUTPUT]: Comparison saved -> E:\CODING\LitterVision\ML Training - 2\gan_output\real_vs_fake_comparison.png
+
+  [OUTPUT]: C:\Users\Vansh Agrawal\AppData\Local\Temp\ipykernel_19956\3256841989.py:19: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+
+
+=== Cell 22 (markdown) ===
+# CELL 11 — Visual Gallery & Synthesis Report 
+
+=== Cell 23 (code) ===
+# This cell scans the output directory and displays all 
+# generated graphs, loss curves, and image grids in order.
+# ============================================================
+
+import os
+from IPython.display import display, Image as IPImage, HTML
+from PIL import Image
+
+# Use the output directory defined earlier in the notebook
+output_path = r"E:\CODING\LitterVision\ML Training - 2\gan_output"
+
+
+
+  [OUTPUT]: Found 55 analytical results and image grids.
+
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+  [OUTPUT]: --------------------------------------------------------------------------------
+
+Report generation complete.
+
+
+=== Cell 24 (markdown) ===
+# EXPORTING MODEL
+
+=== Cell 25 (markdown) ===
+1. Export for Production
+
+=== Cell 26 (code) ===
+import torch
+import os
+
+# Define paths
+weights_path = r"E:\CODING\LitterVision\ML Training - 2\gan_output\generator.pth"
+production_path = r"E:\CODING\LitterVision\generator_scripted.pt"
+
+# 1. Load the model with current architecture
+model = Generator(LATENT_DIM, GEN_FEATURES, NUM_CHANNELS).to("cpu")
+model.load_state_dict(torch.load(weights_path, map_location="cpu"))
+model.eval()
+
+# 2. Convert to 
+
+  [OUTPUT]: ✅ Production model exported to: E:\CODING\LitterVision\generator_scripted.pt
+
+
+=== Cell 27 (markdown) ===
+2. The Backend Inference Service
+
+=== Cell 28 (code) ===
+import torch
+import torchvision.utils as vutils
+import numpy as np
+from PIL import Image
+import io
+import base64
+
+class WasteGeneratorService:
+    def __init__(self, model_path="generator_scripted.pt", device="cpu"):
+        self.device = torch.device(device)
+        # Load the self-contained TorchScript model
+        self.model = torch.jit.load(model_path, map_location=self.device)
+        self.m
+
+=== Cell 29 (code) ===
+

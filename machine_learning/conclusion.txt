@@ -1,0 +1,18 @@
+=== Cell 33 ===
+---
+## 13. Conclusion
+
+| Aspect | Approach Used |
+|---|---|
+| **Base Model** | MobileNetV2 (ImageNet pretrained) |
+| **Training Strategy** | 2-stage: frozen head → fine-tune top layers |
+| **Augmentation** | Rotation, shift, zoom, brightness, channel shift |
+| **Class Imbalance** | Balanced class weights via `sklearn` |
+| **Regularization** | Dropout (0.4 + 0.3), L2, BatchNorm |
+| **Callbacks** | EarlyStopping, ReduceLROnPlateau, ModelCheckpoint |
+| **Confidence Filter** | Threshold at 0.60 → Unknown |
+| **Evaluation** | Confusion matrix, precision/recall/F1 per class |
+
+The final model is saved to `model.h5` and ready to be loaded by the Flask backend (`app.py`).
+
+For deployment, replace the `model.h5` in your project root with `best_model_finetuned.h5` (the checkpoint with the best validation accuracy).
