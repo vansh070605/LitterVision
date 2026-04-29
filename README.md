@@ -135,6 +135,6 @@ LitterVision successfully demonstrates that lightweight neural architectures, wh
 -   **Federated Learning**: Allowing edge devices to contribute to the global model without compromising user data privacy.
 
 ---
-**Authors**: [Insert Name]  
+**Authors**: Vansh  
 **License**: MIT  
 **Date**: April 2026
