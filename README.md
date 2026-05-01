@@ -136,5 +136,4 @@ LitterVision successfully demonstrates that lightweight neural architectures, wh
 
 ---
 **Authors**: Vansh  
-**License**: MIT  
 **Date**: April 2026
