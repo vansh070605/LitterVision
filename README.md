@@ -8,7 +8,7 @@ LitterVision AI is a comprehensive, edge-ready visual intelligence framework des
 ## 1. Introduction & Problem Statement
 Global urban centers generate over 2 billion tons of municipal solid waste annually. A significant bottleneck in recycling efficiency is the "last-mile" sorting—the point at which mixed waste must be separated into recyclable streams. Manual sorting is labor-intensive, hazardous, and economically inefficient, while existing optical sorters often fail when faced with complex backgrounds, crushed items, or severe contamination.
 
-**LitterVision AI** solves this by providing a portable, high-accuracy classification engine that can be deployed on mobile devices or edge IoT nodes. The project aims to bridge the gap between laboratory-grade computer vision and real-world, unpredictable spatial environments.
+**LitterVision** solves this by providing a portable, high-accuracy classification engine that can be deployed on mobile devices or edge IoT nodes. The project aims to bridge the gap between laboratory-grade computer vision and real-world, unpredictable spatial environments.
 
 ---
 
